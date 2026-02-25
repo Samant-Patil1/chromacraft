@@ -1,0 +1,2698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>ChromaCraft - Color Palette Studio</title>
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+ <style>
+ :root {
+ --bg-primary: #0a0a0f;
+ --bg-secondary: #12121a;
+ --bg-tertiary: #1a1a25;
+ --text-primary: #ffffff;
+ --text-secondary: #a0a0b0;
+ --text-muted: #606070;
+ --accent: #6366f1;
+ --accent-hover: #818cf8;
+ --border: #2a2a3a;
+ --success: #22c55e;
+ --warning: #f59e0b;
+ --danger: #ef4444;
+ --shadow: 0 4px 6px -1px rgba(0,0,0,0.3);
+ --shadow-lg: 0 20px 40px -10px rgba(0,0,0,0.5);
+ }
+
+ * {
+ margin: 0;
+ padding: 0;
+ box-sizing: border-box;
+ }
+
+ body {
+ font-family: 'Inter', sans-serif;
+ background: var(--bg-primary);
+ color: var(--text-primary);
+ min-height: 100vh;
+ line-height: 1.6;
+ }
+
+ /* Header */
+ .header {
+ position: fixed;
+ top: 0;
+ left: 0;
+ right: 0;
+ z-index: 1000;
+ background: rgba(10, 10, 15, 0.9);
+ backdrop-filter: blur(20px);
+ border-bottom: 1px solid var(--border);
+ }
+
+ .header-content {
+ max-width: 1400px;
+ margin: 0 auto;
+ padding: 15px 30px;
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ }
+
+ .logo {
+ display: flex;
+ align-items: center;
+ gap: 12px;
+ text-decoration: none;
+ color: var(--text-primary);
+ }
+
+ .logo-icon {
+ width: 40px;
+ height: 40px;
+ background: linear-gradient(135deg, #6366f1, #a855f7, #ec4899);
+ border-radius: 12px;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ font-size: 20px;
+ }
+
+ .logo-text {
+ font-size: 24px;
+ font-weight: 800;
+ background: linear-gradient(135deg, #6366f1, #ec4899);
+ -webkit-background-clip: text;
+ -webkit-text-fill-color: transparent;
+ }
+
+ .nav-tabs {
+ display: flex;
+ gap: 8px;
+ background: var(--bg-secondary);
+ padding: 6px;
+ border-radius: 12px;
+ }
+
+ .nav-tab {
+ padding: 10px 24px;
+ border: none;
+ background: transparent;
+ color: var(--text-secondary);
+ font-size: 14px;
+ font-weight: 600;
+ border-radius: 8px;
+ cursor: pointer;
+ transition: all 0.3s ease;
+ font-family: inherit;
+ }
+
+ .nav-tab:hover {
+ color: var(--text-primary);
+ }
+
+ .nav-tab.active {
+ background: var(--bg-tertiary);
+ color: var(--text-primary);
+ }
+
+ .header-actions {
+ display: flex;
+ gap: 12px;
+ }
+
+ .btn-icon {
+ width: 40px;
+ height: 40px;
+ border: none;
+ background: var(--bg-secondary);
+ color: var(--text-secondary);
+ border-radius: 10px;
+ cursor: pointer;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ transition: all 0.3s ease;
+ font-size: 18px;
+ }
+
+ .btn-icon:hover {
+ background: var(--bg-tertiary);
+ color: var(--text-primary);
+ }
+
+ /* Main Content */
+ .main {
+ padding-top: 90px;
+ min-height: 100vh;
+ }
+
+ .tab-content {
+ display: none;
+ padding: 30px;
+ max-width: 1400px;
+ margin: 0 auto;
+ animation: fadeIn 0.4s ease;
+ }
+
+ .tab-content.active {
+ display: block;
+ }
+
+ @keyframes fadeIn {
+ from { opacity: 0; transform: translateY(10px); }
+ to { opacity: 1; transform: translateY(0); }
+ }
+
+ /* Section Header */
+ .section-header {
+ margin-bottom: 30px;
+ }
+
+ .section-title {
+ font-size: 32px;
+ font-weight: 700;
+ margin-bottom: 8px;
+ }
+
+ .section-subtitle {
+ color: var(--text-secondary);
+ font-size: 16px;
+ }
+
+ /* Search & Filter Bar */
+ .toolbar {
+ display: flex;
+ gap: 16px;
+ margin-bottom: 30px;
+ flex-wrap: wrap;
+ align-items: center;
+ }
+
+ .search-box {
+ flex: 1;
+ min-width: 250px;
+ position: relative;
+ }
+
+ .search-box input {
+ width: 100%;
+ padding: 14px 20px 14px 50px;
+ background: var(--bg-secondary);
+ border: 1px solid var(--border);
+ border-radius: 12px;
+ color: var(--text-primary);
+ font-size: 15px;
+ font-family: inherit;
+ transition: all 0.3s ease;
+ }
+
+ .search-box input:focus {
+ outline: none;
+ border-color: var(--accent);
+ }
+
+ .search-box::before {
+ content: "";
+ position: absolute;
+ left: 18px;
+ top: 50%;
+ transform: translateY(-50%);
+ font-size: 16px;
+ opacity: 0.5;
+ }
+
+ .filter-tags {
+ display: flex;
+ gap: 8px;
+ flex-wrap: wrap;
+ }
+
+ .filter-tag {
+ padding: 10px 18px;
+ background: var(--bg-secondary);
+ border: 1px solid var(--border);
+ border-radius: 20px;
+ color: var(--text-secondary);
+ font-size: 13px;
+ font-weight: 600;
+ cursor: pointer;
+ transition: all 0.3s ease;
+ font-family: inherit;
+ }
+
+ .filter-tag:hover {
+ border-color: var(--accent);
+ color: var(--text-primary);
+ }
+
+ .filter-tag.active {
+ background: var(--accent);
+ border-color: var(--accent);
+ color: white;
+ }
+
+ /* Palette Grid */
+ .palette-grid {
+ display: grid;
+ grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+ gap: 24px;
+ }
+
+ .palette-card {
+ background: var(--bg-secondary);
+ border: 1px solid var(--border);
+ border-radius: 16px;
+ overflow: hidden;
+ transition: all 0.3s ease;
+ cursor: pointer;
+ }
+
+ .palette-card:hover {
+ transform: translateY(-4px);
+ border-color: rgba(99, 102, 241, 0.3);
+ box-shadow: var(--shadow-lg);
+ }
+
+ .palette-preview {
+ height: 160px;
+ display: flex;
+ }
+
+ .palette-color {
+ flex: 1;
+ display: flex;
+ flex-direction: column;
+ justify-content: flex-end;
+ padding: 12px;
+ font-family: 'Space Mono', monospace;
+ font-size: 11px;
+ font-weight: 700;
+ text-transform: uppercase;
+ letter-spacing: 0.5px;
+ position: relative;
+ transition: flex 0.3s ease;
+ }
+
+ .palette-color:hover {
+ flex: 2;
+ }
+
+ .palette-color .hex {
+ opacity: 0;
+ transform: translateY(10px);
+ transition: all 0.3s ease;
+ }
+
+ .palette-card:hover .palette-color .hex {
+ opacity: 1;
+ transform: translateY(0);
+ }
+
+ .palette-info {
+ padding: 20px;
+ }
+
+ .palette-name {
+ font-size: 18px;
+ font-weight: 700;
+ margin-bottom: 6px;
+ display: flex;
+ align-items: center;
+ gap: 10px;
+ }
+
+ .palette-name .favorite-btn {
+ margin-left: auto;
+ background: none;
+ border: none;
+ cursor: pointer;
+ font-size: 18px;
+ opacity: 0.5;
+ transition: all 0.3s ease;
+ }
+
+ .palette-name .favorite-btn:hover,
+ .palette-name .favorite-btn.active {
+ opacity: 1;
+ transform: scale(1.2);
+ }
+
+ .palette-name .favorite-btn.active {
+ filter: drop-shadow(0 0 8px rgba(239, 68, 68, 0.5));
+ }
+
+ .palette-tags {
+ display: flex;
+ gap: 6px;
+ flex-wrap: wrap;
+ }
+
+ .palette-tag {
+ padding: 4px 10px;
+ background: var(--bg-tertiary);
+ border-radius: 12px;
+ font-size: 11px;
+ color: var(--text-secondary);
+ font-weight: 600;
+ }
+
+ .palette-actions {
+ display: flex;
+ gap: 8px;
+ margin-top: 16px;
+ padding-top: 16px;
+ border-top: 1px solid var(--border);
+ }
+
+ .btn-small {
+ flex: 1;
+ padding: 10px;
+ background: var(--bg-tertiary);
+ border: none;
+ border-radius: 8px;
+ color: var(--text-secondary);
+ font-size: 12px;
+ font-weight: 600;
+ cursor: pointer;
+ transition: all 0.3s ease;
+ font-family: inherit;
+ }
+
+ .btn-small:hover {
+ background: var(--accent);
+ color: white;
+ }
+
+ /* Generator Section */
+ .generator-container {
+ display: grid;
+ grid-template-columns: 1fr 1.5fr;
+ gap: 30px;
+ }
+
+ .generator-panel {
+ background: var(--bg-secondary);
+ border: 1px solid var(--border);
+ border-radius: 20px;
+ padding: 30px;
+ }
+
+ .panel-title {
+ font-size: 20px;
+ font-weight: 700;
+ margin-bottom: 24px;
+ display: flex;
+ align-items: center;
+ gap: 10px;
+ }
+
+ .form-group {
+ margin-bottom: 24px;
+ }
+
+ .form-label {
+ display: block;
+ font-size: 14px;
+ font-weight: 600;
+ color: var(--text-secondary);
+ margin-bottom: 10px;
+ text-transform: uppercase;
+ letter-spacing: 0.5px;
+ }
+
+ .color-input-wrapper {
+ display: flex;
+ gap: 12px;
+ align-items: center;
+ }
+
+ .color-picker {
+ width: 60px;
+ height: 50px;
+ border: none;
+ border-radius: 12px;
+ cursor: pointer;
+ background: none;
+ }
+
+ .color-picker::-webkit-color-swatch-wrapper {
+ padding: 0;
+ }
+
+ .color-picker::-webkit-color-swatch {
+ border: 2px solid var(--border);
+ border-radius: 10px;
+ }
+
+ .color-text-input {
+ flex: 1;
+ padding: 14px 18px;
+ background: var(--bg-tertiary);
+ border: 1px solid var(--border);
+ border-radius: 12px;
+ color: var(--text-primary);
+ font-family: 'Space Mono', monospace;
+ font-size: 15px;
+ text-transform: uppercase;
+ }
+
+ .color-text-input:focus {
+ outline: none;
+ border-color: var(--accent);
+ }
+
+ .harmony-options {
+ display: grid;
+ grid-template-columns: repeat(2, 1fr);
+ gap: 10px;
+ }
+
+ .harmony-option {
+ padding: 16px;
+ background: var(--bg-tertiary);
+ border: 2px solid transparent;
+ border-radius: 12px;
+ text-align: center;
+ cursor: pointer;
+ transition: all 0.3s ease;
+ }
+
+ .harmony-option:hover {
+ border-color: var(--border);
+ }
+
+ .harmony-option.active {
+ border-color: var(--accent);
+ background: rgba(99, 102, 241, 0.1);
+ }
+
+ .harmony-option .icon {
+ font-size: 24px;
+ margin-bottom: 8px;
+ }
+
+ .harmony-option .name {
+ font-size: 13px;
+ font-weight: 600;
+ }
+
+ .harmony-option .desc {
+ font-size: 11px;
+ color: var(--text-muted);
+ margin-top: 4px;
+ }
+
+ .btn-primary {
+ width: 100%;
+ padding: 16px;
+ background: linear-gradient(135deg, var(--accent), #a855f7);
+ border: none;
+ border-radius: 12px;
+ color: white;
+ font-size: 15px;
+ font-weight: 700;
+ cursor: pointer;
+ transition: all 0.3s ease;
+ font-family: inherit;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ gap: 10px;
+ }
+
+ .btn-primary:hover {
+ transform: translateY(-2px);
+ box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+ }
+
+ .btn-secondary {
+ width: 100%;
+ padding: 14px;
+ background: var(--bg-tertiary);
+ border: 1px solid var(--border);
+ border-radius: 12px;
+ color: var(--text-primary);
+ font-size: 14px;
+ font-weight: 600;
+ cursor: pointer;
+ transition: all 0.3s ease;
+ font-family: inherit;
+ margin-top: 12px;
+ }
+
+ .btn-secondary:hover {
+ background: var(--border);
+ }
+
+ /* Generated Palette Display */
+ .generated-palette {
+ background: var(--bg-secondary);
+ border: 1px solid var(--border);
+ border-radius: 20px;
+ overflow: hidden;
+ }
+
+ .generated-preview {
+ height: 250px;
+ display: flex;
+ }
+
+ .generated-color {
+ flex: 1;
+ display: flex;
+ flex-direction: column;
+ justify-content: flex-end;
+ align-items: center;
+ padding: 20px;
+ font-family: 'Space Mono', monospace;
+ position: relative;
+ cursor: pointer;
+ transition: all 0.3s ease;
+ }
+
+ .generated-color:hover {
+ flex: 1.5;
+ }
+
+ .generated-color .copy-hint {
+ position: absolute;
+ top: 20px;
+ padding: 8px 16px;
+ background: rgba(0,0,0,0.5);
+ backdrop-filter: blur(10px);
+ border-radius: 20px;
+ font-size: 12px;
+ font-weight: 700;
+ opacity: 0;
+ transition: all 0.3s ease;
+ }
+
+ .generated-color:hover .copy-hint {
+ opacity: 1;
+ }
+
+ .generated-color .hex {
+ font-size: 18px;
+ font-weight: 700;
+ margin-bottom: 4px;
+ }
+
+ .generated-color .rgb {
+ font-size: 12px;
+ opacity: 0.7;
+ }
+
+ .generated-info {
+ padding: 30px;
+ }
+
+ .color-details {
+ display: grid;
+ grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+ gap: 20px;
+ margin-bottom: 24px;
+ }
+
+ .color-detail {
+ background: var(--bg-tertiary);
+ padding: 16px;
+ border-radius: 12px;
+ text-align: center;
+ }
+
+ .color-detail-label {
+ font-size: 11px;
+ color: var(--text-muted);
+ text-transform: uppercase;
+ letter-spacing: 1px;
+ margin-bottom: 6px;
+ }
+
+ .color-detail-value {
+ font-family: 'Space Mono', monospace;
+ font-size: 16px;
+ font-weight: 700;
+ }
+
+ /* Contrast Checker */
+ .contrast-checker {
+ background: var(--bg-secondary);
+ border: 1px solid var(--border);
+ border-radius: 20px;
+ padding: 30px;
+ margin-top: 30px;
+ }
+
+ .contrast-demo {
+ display: grid;
+ grid-template-columns: repeat(2, 1fr);
+ gap: 20px;
+ margin-bottom: 24px;
+ }
+
+ .contrast-sample {
+ padding: 30px;
+ border-radius: 16px;
+ text-align: center;
+ transition: all 0.3s ease;
+ }
+
+ .contrast-sample h4 {
+ font-size: 24px;
+ margin-bottom: 10px;
+ }
+
+ .contrast-sample p {
+ font-size: 14px;
+ }
+
+ .contrast-score {
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ gap: 20px;
+ padding: 20px;
+ background: var(--bg-tertiary);
+ border-radius: 12px;
+ }
+
+ .score-circle {
+ width: 80px;
+ height: 80px;
+ border-radius: 50%;
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ justify-content: center;
+ font-weight: 700;
+ border: 4px solid;
+ }
+
+ .score-circle .ratio {
+ font-size: 20px;
+ }
+
+ .score-circle .grade {
+ font-size: 12px;
+ text-transform: uppercase;
+ }
+
+ .score-pass {
+ border-color: var(--success);
+ color: var(--success);
+ }
+
+ .score-fail {
+ border-color: var(--danger);
+ color: var(--danger);
+ }
+
+ /* Custom Palette Builder */
+ .custom-builder {
+ background: var(--bg-secondary);
+ border: 1px solid var(--border);
+ border-radius: 20px;
+ padding: 30px;
+ }
+
+ .custom-palette-display {
+ height: 200px;
+ display: flex;
+ border-radius: 16px;
+ overflow: hidden;
+ margin-bottom: 30px;
+ }
+
+ .custom-color-slot {
+ flex: 1;
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ justify-content: center;
+ gap: 10px;
+ position: relative;
+ cursor: pointer;
+ transition: all 0.3s ease;
+ }
+
+ .custom-color-slot:hover {
+ flex: 1.2;
+ }
+
+ .custom-color-slot .remove-btn {
+ position: absolute;
+ top: 10px;
+ right: 10px;
+ width: 28px;
+ height: 28px;
+ background: rgba(0,0,0,0.5);
+ border: none;
+ border-radius: 50%;
+ color: white;
+ cursor: pointer;
+ opacity: 0;
+ transition: all 0.3s ease;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ }
+
+ .custom-color-slot:hover .remove-btn {
+ opacity: 1;
+ }
+
+ .custom-color-slot input[type="color"] {
+ width: 50px;
+ height: 50px;
+ border: 3px solid rgba(255,255,255,0.3);
+ border-radius: 50%;
+ cursor: pointer;
+ background: none;
+ }
+
+ .custom-color-slot .hex-label {
+ font-family: 'Space Mono', monospace;
+ font-size: 12px;
+ font-weight: 700;
+ background: rgba(0,0,0,0.5);
+ padding: 4px 12px;
+ border-radius: 20px;
+ }
+
+ .custom-controls {
+ display: flex;
+ gap: 12px;
+ flex-wrap: wrap;
+ margin-bottom: 20px;
+ }
+
+ .custom-actions {
+ display: flex;
+ gap: 12px;
+ flex-wrap: wrap;
+ }
+
+ /* History Section */
+ .history-section {
+ margin-top: 30px;
+ padding-top: 30px;
+ border-top: 1px solid var(--border);
+ }
+
+ .history-grid {
+ display: flex;
+ gap: 12px;
+ flex-wrap: wrap;
+ }
+
+ .history-item {
+ width: 80px;
+ height: 60px;
+ border-radius: 12px;
+ cursor: pointer;
+ transition: all 0.3s ease;
+ border: 2px solid transparent;
+ }
+
+ .history-item:hover {
+ transform: scale(1.1);
+ border-color: var(--accent);
+ }
+
+ /* Gradient Generator */
+ .gradient-preview {
+ height: 200px;
+ border-radius: 16px;
+ margin-bottom: 24px;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ font-size: 18px;
+ font-weight: 700;
+ text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+ }
+
+ .gradient-controls {
+ display: grid;
+ grid-template-columns: 1fr 1fr auto;
+ gap: 16px;
+ margin-bottom: 20px;
+ }
+
+ .gradient-angle {
+ display: flex;
+ align-items: center;
+ gap: 12px;
+ }
+
+ .gradient-angle input[type="range"] {
+ flex: 1;
+ -webkit-appearance: none;
+ height: 6px;
+ background: var(--bg-tertiary);
+ border-radius: 3px;
+ outline: none;
+ }
+
+ .gradient-angle input[type="range"]::-webkit-slider-thumb {
+ -webkit-appearance: none;
+ width: 20px;
+ height: 20px;
+ background: var(--accent);
+ border-radius: 50%;
+ cursor: pointer;
+ }
+
+ /* Image Extractor */
+ .image-dropzone {
+ border: 2px dashed var(--border);
+ border-radius: 20px;
+ padding: 60px 40px;
+ text-align: center;
+ cursor: pointer;
+ transition: all 0.3s ease;
+ }
+
+ .image-dropzone:hover {
+ border-color: var(--accent);
+ background: rgba(99, 102, 241, 0.05);
+ }
+
+ .image-dropzone.drag-over {
+ border-color: var(--success);
+ background: rgba(34, 197, 94, 0.05);
+ }
+
+ .image-dropzone-icon {
+ font-size: 48px;
+ margin-bottom: 16px;
+ }
+
+ .image-preview {
+ max-width: 100%;
+ max-height: 400px;
+ border-radius: 16px;
+ margin-bottom: 24px;
+ }
+
+ .extracted-colors {
+ display: flex;
+ gap: 12px;
+ justify-content: center;
+ flex-wrap: wrap;
+ }
+
+ .extracted-color {
+ width: 80px;
+ height: 80px;
+ border-radius: 12px;
+ cursor: pointer;
+ transition: all 0.3s ease;
+ display: flex;
+ align-items: flex-end;
+ justify-content: center;
+ padding-bottom: 8px;
+ font-family: 'Space Mono', monospace;
+ font-size: 10px;
+ font-weight: 700;
+ }
+
+ .extracted-color:hover {
+ transform: scale(1.1);
+ box-shadow: var(--shadow-lg);
+ }
+
+ /* Export Modal */
+ .modal-overlay {
+ position: fixed;
+ inset: 0;
+ background: rgba(0,0,0,0.8);
+ backdrop-filter: blur(10px);
+ z-index: 2000;
+ display: none;
+ align-items: center;
+ justify-content: center;
+ padding: 20px;
+ }
+
+ .modal-overlay.active {
+ display: flex;
+ }
+
+ .modal {
+ background: var(--bg-secondary);
+ border: 1px solid var(--border);
+ border-radius: 24px;
+ max-width: 700px;
+ width: 100%;
+ max-height: 85vh;
+ overflow: hidden;
+ animation: modalIn 0.3s ease;
+ }
+
+ @keyframes modalIn {
+ from { opacity: 0; transform: scale(0.95); }
+ to { opacity: 1; transform: scale(1); }
+ }
+
+ .modal-header {
+ padding: 24px 30px;
+ border-bottom: 1px solid var(--border);
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ }
+
+ .modal-title {
+ font-size: 20px;
+ font-weight: 700;
+ }
+
+ .modal-close {
+ width: 36px;
+ height: 36px;
+ border: none;
+ background: var(--bg-tertiary);
+ border-radius: 10px;
+ color: var(--text-secondary);
+ font-size: 20px;
+ cursor: pointer;
+ transition: all 0.3s ease;
+ }
+
+ .modal-close:hover {
+ background: var(--danger);
+ color: white;
+ }
+
+ .modal-body {
+ padding: 24px 30px;
+ max-height: 60vh;
+ overflow-y: auto;
+ }
+
+ .export-tabs {
+ display: flex;
+ gap: 8px;
+ margin-bottom: 20px;
+ flex-wrap: wrap;
+ }
+
+ .export-tab {
+ padding: 10px 20px;
+ background: var(--bg-tertiary);
+ border: none;
+ border-radius: 8px;
+ color: var(--text-secondary);
+ font-size: 13px;
+ font-weight: 600;
+ cursor: pointer;
+ transition: all 0.3s ease;
+ font-family: inherit;
+ }
+
+ .export-tab.active {
+ background: var(--accent);
+ color: white;
+ }
+
+ .code-block {
+ background: var(--bg-primary);
+ border: 1px solid var(--border);
+ border-radius: 12px;
+ padding: 20px;
+ font-family: 'Space Mono', monospace;
+ font-size: 13px;
+ line-height: 1.8;
+ overflow-x: auto;
+ white-space: pre-wrap;
+ word-break: break-all;
+ max-height: 300px;
+ overflow-y: auto;
+ }
+
+ .modal-footer {
+ padding: 20px 30px;
+ border-top: 1px solid var(--border);
+ display: flex;
+ gap: 12px;
+ flex-wrap: wrap;
+ }
+
+ .btn-copy {
+ flex: 1;
+ padding: 14px;
+ background: var(--accent);
+ border: none;
+ border-radius: 12px;
+ color: white;
+ font-size: 14px;
+ font-weight: 700;
+ cursor: pointer;
+ transition: all 0.3s ease;
+ font-family: inherit;
+ }
+
+ .btn-copy:hover {
+ background: var(--accent-hover);
+ }
+
+ .btn-download {
+ flex: 1;
+ padding: 14px;
+ background: var(--success);
+ border: none;
+ border-radius: 12px;
+ color: white;
+ font-size: 14px;
+ font-weight: 700;
+ cursor: pointer;
+ transition: all 0.3s ease;
+ font-family: inherit;
+ }
+
+ .btn-download:hover {
+ background: #16a34a;
+ }
+
+ /* Canvas Preview for Export */
+ .canvas-preview {
+ background: var(--bg-primary);
+ border-radius: 12px;
+ padding: 20px;
+ margin-bottom: 20px;
+ text-align: center;
+ }
+
+ .canvas-preview canvas {
+ max-width: 100%;
+ border-radius: 8px;
+ box-shadow: var(--shadow);
+ }
+
+ /* Toast Notification */
+ .toast {
+ position: fixed;
+ bottom: 30px;
+ left: 50%;
+ transform: translateX(-50%) translateY(100px);
+ background: var(--bg-secondary);
+ border: 1px solid var(--border);
+ padding: 16px 30px;
+ border-radius: 12px;
+ display: flex;
+ align-items: center;
+ gap: 12px;
+ box-shadow: var(--shadow-lg);
+ z-index: 3000;
+ opacity: 0;
+ transition: all 0.3s ease;
+ }
+
+ .toast.show {
+ opacity: 1;
+ transform: translateX(-50%) translateY(0);
+ }
+
+ .toast-icon {
+ width: 28px;
+ height: 28px;
+ background: var(--success);
+ border-radius: 50%;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ font-size: 14px;
+ }
+
+ /* Empty State */
+ .empty-state {
+ text-align: center;
+ padding: 80px 40px;
+ color: var(--text-secondary);
+ }
+
+ .empty-state-icon {
+ font-size: 64px;
+ margin-bottom: 20px;
+ opacity: 0.5;
+ }
+
+ .empty-state h3 {
+ font-size: 24px;
+ margin-bottom: 10px;
+ color: var(--text-primary);
+ }
+
+ /* Responsive */
+ @media (max-width: 1024px) {
+ .generator-container {
+ grid-template-columns: 1fr;
+ }
+ }
+
+ @media (max-width: 768px) {
+ .nav-tabs {
+ display: none;
+ }
+
+ .palette-grid {
+ grid-template-columns: 1fr;
+ }
+
+ .generated-preview {
+ height: 180px;
+ }
+
+ .contrast-demo {
+ grid-template-columns: 1fr;
+ }
+
+ .gradient-controls {
+ grid-template-columns: 1fr;
+ }
+
+ .custom-palette-display {
+ height: 150px;
+ }
+
+ .modal {
+ max-width: 95%;
+ }
+ }
+
+ /* Scrollbar */
+ ::-webkit-scrollbar {
+ width: 8px;
+ height: 8px;
+ }
+
+ ::-webkit-scrollbar-track {
+ background: var(--bg-primary);
+ }
+
+ ::-webkit-scrollbar-thumb {
+ background: var(--border);
+ border-radius: 4px;
+ }
+
+ ::-webkit-scrollbar-thumb:hover {
+ background: var(--text-muted);
+ }
+
+ /* Color Blindness Simulation */
+ .colorblind-options {
+ display: flex;
+ gap: 8px;
+ flex-wrap: wrap;
+ margin-bottom: 20px;
+ }
+
+ .colorblind-option {
+ padding: 10px 16px;
+ background: var(--bg-tertiary);
+ border: 2px solid transparent;
+ border-radius: 8px;
+ color: var(--text-secondary);
+ font-size: 12px;
+ font-weight: 600;
+ cursor: pointer;
+ transition: all 0.3s ease;
+ font-family: inherit;
+ }
+
+ .colorblind-option:hover {
+ border-color: var(--border);
+ }
+
+ .colorblind-option.active {
+ border-color: var(--accent);
+ color: var(--text-primary);
+ }
+ </style>
+</head>
+<body>
+ <!-- Header -->
+ <header class="header">
+ <div class="header-content">
+ <a href="#" class="logo">
+ <div class="logo-icon" style="font-weight: 800; font-size: 18px; color: white;">Cr</div>
+ <div class="logo-text">ChromaCraft</div>
+ </a>
+ <nav class="nav-tabs">
+ <button class="nav-tab active" data-tab="explore">Explore</button>
+ <button class="nav-tab" data-tab="generate">Generate</button>
+ <button class="nav-tab" data-tab="create">Create</button>
+ <button class="nav-tab" data-tab="tools">Tools</button>
+ <button class="nav-tab" data-tab="favorites">Favorites</button>
+ </nav>
+ <div class="header-actions">
+ <button class="btn-icon" title="Random Palette" onclick="generateRandom()" style="font-size: 14px; font-weight: 700;">R</button>
+ <button class="btn-icon" title="About" onclick="showToast('ChromaCraft v2.0 - Your Color Studio')" style="font-size: 14px; font-weight: 700;">i</button>
+ </div>
+ </div>
+ </header>
+
+ <!-- Main Content -->
+ <main class="main">
+ <!-- Explore Tab -->
+ <div class="tab-content active" id="explore-tab">
+ <div class="section-header">
+ <h1 class="section-title">Curated Palettes</h1>
+ <p class="section-subtitle">Hand-picked color combinations for your next project</p>
+ </div>
+
+ <div class="toolbar">
+ <div class="search-box">
+ <input type="text" id="search-input" placeholder="Search palettes...">
+ </div>
+ <div class="filter-tags">
+ <button class="filter-tag active" data-filter="all">All</button>
+ <button class="filter-tag" data-filter="dark">Dark</button>
+ <button class="filter-tag" data-filter="light">Light</button>
+ <button class="filter-tag" data-filter="colorful">Colorful</button>
+ <button class="filter-tag" data-filter="minimal">Minimal</button>
+ <button class="filter-tag" data-filter="nature">Nature</button>
+ <button class="filter-tag" data-filter="tech">Tech</button>
+ </div>
+ </div>
+
+ <div class="palette-grid" id="palette-grid">
+ <!-- Palettes will be injected here -->
+ </div>
+ </div>
+
+ <!-- Generate Tab -->
+ <div class="tab-content" id="generate-tab">
+ <div class="section-header">
+ <h1 class="section-title">Palette Generator</h1>
+ <p class="section-subtitle">Create harmonious color palettes from any base color</p>
+ </div>
+
+ <div class="generator-container">
+ <div class="generator-panel">
+ <h3 class="panel-title">Configuration</h3>
+
+ <div class="form-group">
+ <label class="form-label">Base Color</label>
+ <div class="color-input-wrapper">
+ <input type="color" class="color-picker" id="base-color" value="#6366f1">
+ <input type="text" class="color-text-input" id="base-color-text" value="#6366f1" maxlength="7">
+ </div>
+ </div>
+
+ <div class="form-group">
+ <label class="form-label">Harmony Type</label>
+ <div class="harmony-options">
+ <div class="harmony-option active" data-harmony="analogous">
+ <div class="icon" style="font-size: 20px; font-weight: 700; color: var(--accent);">A</div>
+ <div class="name">Analogous</div>
+ <div class="desc">Adjacent colors</div>
+ </div>
+ <div class="harmony-option" data-harmony="monochromatic">
+ <div class="icon" style="font-size: 20px; font-weight: 700; color: var(--accent);">M</div>
+ <div class="name">Mono</div>
+ <div class="desc">Same hue shades</div>
+ </div>
+ <div class="harmony-option" data-harmony="complementary">
+ <div class="icon" style="font-size: 20px; font-weight: 700; color: var(--accent);">C</div>
+ <div class="name">Complementary</div>
+ <div class="desc">Opposite colors</div>
+ </div>
+ <div class="harmony-option" data-harmony="triadic">
+ <div class="icon" style="font-size: 20px; font-weight: 700; color: var(--accent);">T</div>
+ <div class="name">Triadic</div>
+ <div class="desc">3-way balance</div>
+ </div>
+ <div class="harmony-option" data-harmony="split-complementary">
+ <div class="icon" style="font-size: 20px; font-weight: 700; color: var(--accent);">S</div>
+ <div class="name">Split Comp</div>
+ <div class="desc">Near opposites</div>
+ </div>
+ <div class="harmony-option" data-harmony="tetradic">
+ <div class="icon" style="font-size: 20px; font-weight: 700; color: var(--accent);">Q</div>
+ <div class="name">Tetradic</div>
+ <div class="desc">Rectangle scheme</div>
+ </div>
+ </div>
+ </div>
+
+ <button class="btn-primary" onclick="generateFromBase()">
+ Generate Palette
+ </button>
+ <button class="btn-secondary" onclick="generateRandom()">
+ Surprise Me
+ </button>
+ </div>
+
+ <div>
+ <div class="generated-palette" id="generated-palette">
+ <div class="generated-preview" id="generated-preview">
+ <div class="generated-color" style="background: #6366f1; color: white;" onclick="copyColor('#6366f1')">
+ <span class="copy-hint">Click to copy</span>
+ <div class="hex">#6366f1</div>
+ <div class="rgb">rgb(99, 102, 241)</div>
+ </div>
+ <div class="generated-color" style="background: #818cf8; color: #0f172a;" onclick="copyColor('#818cf8')">
+ <span class="copy-hint">Click to copy</span>
+ <div class="hex">#818cf8</div>
+ <div class="rgb">rgb(129, 140, 248)</div>
+ </div>
+ <div class="generated-color" style="background: #a5b4fc; color: #0f172a;" onclick="copyColor('#a5b4fc')">
+ <span class="copy-hint">Click to copy</span>
+ <div class="hex">#a5b4fc</div>
+ <div class="rgb">rgb(165, 180, 252)</div>
+ </div>
+ <div class="generated-color" style="background: #c7d2fe; color: #0f172a;" onclick="copyColor('#c7d2fe')">
+ <span class="copy-hint">Click to copy</span>
+ <div class="hex">#c7d2fe</div>
+ <div class="rgb">rgb(199, 210, 254)</div>
+ </div>
+ <div class="generated-color" style="background: #4338ca; color: white;" onclick="copyColor('#4338ca')">
+ <span class="copy-hint">Click to copy</span>
+ <div class="hex">#4338ca</div>
+ <div class="rgb">rgb(67, 56, 202)</div>
+ </div>
+ </div>
+ <div class="generated-info">
+ <div class="color-details" id="color-details">
+ <!-- Color details injected here -->
+ </div>
+ <div class="palette-actions">
+ <button class="btn-small" onclick="openExportModal()">Export</button>
+ <button class="btn-small" onclick="downloadPaletteImage()">Download Image</button>
+ <button class="btn-small" onclick="copyAllColors()">Copy All</button>
+ </div>
+ </div>
+ </div>
+
+ <!-- Contrast Checker -->
+ <div class="contrast-checker">
+ <h3 class="panel-title">Contrast Accessibility</h3>
+ <div class="contrast-demo" id="contrast-demo">
+ <div class="contrast-sample" style="background: #6366f1; color: white;">
+ <h4>Large Text</h4>
+ <p>Small text sample</p>
+ </div>
+ <div class="contrast-sample" style="background: white; color: #4338ca;">
+ <h4>Large Text</h4>
+ <p>Small text sample</p>
+ </div>
+ </div>
+ <div class="contrast-score" id="contrast-score">
+ <div class="score-circle score-pass">
+ <div class="ratio">4.5</div>
+ <div class="grade">AA Pass</div>
+ </div>
+ <div class="score-circle score-pass">
+ <div class="ratio">7.0</div>
+ <div class="grade">AAA</div>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
+
+ <!-- Create Tab (Custom Palette Builder) -->
+ <div class="tab-content" id="create-tab">
+ <div class="section-header">
+ <h1 class="section-title">Create Custom Palette</h1>
+ <p class="section-subtitle">Build your own palette from scratch</p>
+ </div>
+
+ <div class="custom-builder">
+ <div class="custom-palette-display" id="custom-palette-display">
+ <div class="custom-color-slot" style="background: #6366f1;">
+ <button class="remove-btn" onclick="removeCustomColor(0)">×</button>
+ <input type="color" value="#6366f1" onchange="updateCustomColor(0, this.value)">
+ <span class="hex-label" style="color: white;">#6366f1</span>
+ </div>
+ <div class="custom-color-slot" style="background: #818cf8;">
+ <button class="remove-btn" onclick="removeCustomColor(1)">×</button>
+ <input type="color" value="#818cf8" onchange="updateCustomColor(1, this.value)">
+ <span class="hex-label" style="color: #0f172a;">#818cf8</span>
+ </div>
+ <div class="custom-color-slot" style="background: #a5b4fc;">
+ <button class="remove-btn" onclick="removeCustomColor(2)">×</button>
+ <input type="color" value="#a5b4fc" onchange="updateCustomColor(2, this.value)">
+ <span class="hex-label" style="color: #0f172a;">#a5b4fc</span>
+ </div>
+ </div>
+
+ <div class="custom-controls">
+ <button class="btn-primary" onclick="addCustomColor()" style="width: auto; padding: 12px 24px;">Add Color</button>
+ <button class="btn-secondary" onclick="shuffleCustomColors()" style="width: auto; padding: 12px 24px; margin-top: 0;">Shuffle</button>
+ <button class="btn-secondary" onclick="clearCustomPalette()" style="width: auto; padding: 12px 24px; margin-top: 0;">Clear</button>
+ </div>
+
+ <div class="custom-actions">
+ <button class="btn-small" onclick="openExportModalCustom()" style="flex: 2; padding: 14px; font-size: 14px;">Export Palette</button>
+ <button class="btn-small" onclick="downloadCustomPaletteImage()" style="flex: 2; padding: 14px; font-size: 14px;">Download Image</button>
+ <button class="btn-small" onclick="saveCustomToFavorites()" style="flex: 1; padding: 14px; font-size: 14px;">Save</button>
+ </div>
+
+ <!-- History -->
+ <div class="history-section" id="history-section" style="display: none;">
+ <h3 class="panel-title">Recent Palettes</h3>
+ <div class="history-grid" id="history-grid">
+ <!-- History items -->
+ </div>
+ </div>
+ </div>
+ </div>
+
+ <!-- Tools Tab -->
+ <div class="tab-content" id="tools-tab">
+ <div class="section-header">
+ <h1 class="section-title">Color Tools</h1>
+ <p class="section-subtitle">Extra utilities for working with colors</p>
+ </div>
+
+ <div class="generator-container">
+ <!-- Gradient Generator -->
+ <div class="generator-panel">
+ <h3 class="panel-title">Gradient Generator</h3>
+ 
+ <div class="gradient-preview" id="gradient-preview" style="background: linear-gradient(135deg, #6366f1, #ec4899);">
+ Gradient Preview
+ </div>
+
+ <div class="gradient-controls">
+ <div class="color-input-wrapper">
+ <input type="color" class="color-picker" id="grad-color-1" value="#6366f1" onchange="updateGradient()">
+ <input type="text" class="color-text-input" value="#6366f1" onchange="document.getElementById('grad-color-1').value=this.value; updateGradient()">
+ </div>
+ <div class="color-input-wrapper">
+ <input type="color" class="color-picker" id="grad-color-2" value="#ec4899" onchange="updateGradient()">
+ <input type="text" class="color-text-input" value="#ec4899" onchange="document.getElementById('grad-color-2').value=this.value; updateGradient()">
+ </div>
+ <button class="btn-icon" onclick="swapGradientColors()" style="width: 50px; height: 50px;">Swap</button>
+ </div>
+
+ <div class="gradient-angle">
+ <span style="font-size: 14px; color: var(--text-secondary);">Angle:</span>
+ <input type="range" id="grad-angle" min="0" max="360" value="135" oninput="updateGradient()">
+ <span id="grad-angle-value" style="font-family: 'Space Mono', monospace; font-size: 14px; min-width: 40px;">135°</span>
+ </div>
+
+ <button class="btn-primary" onclick="copyGradientCSS()" style="margin-top: 20px;">
+ Copy CSS
+ </button>
+ </div>
+
+ <!-- Image Color Extractor -->
+ <div class="generator-panel">
+ <h3 class="panel-title">Image Color Extractor</h3>
+ 
+ <div class="image-dropzone" id="image-dropzone" onclick="document.getElementById('image-input').click()">
+ <div class="image-dropzone-icon" style="font-size: 48px; color: var(--text-muted);">+</div>
+ <p style="font-size: 16px; font-weight: 600; margin-bottom: 8px;">Drop image here or click to upload</p>
+ <p style="font-size: 13px; color: var(--text-muted);">Supports JPG, PNG, WebP</p>
+ <input type="file" id="image-input" accept="image/*" style="display: none;" onchange="handleImageUpload(event)">
+ </div>
+
+ <div id="image-preview-container" style="display: none;">
+ <img id="uploaded-image" class="image-preview" src="" alt="Uploaded">
+ <h4 style="margin-bottom: 16px; font-size: 16px;">Extracted Colors</h4>
+ <div class="extracted-colors" id="extracted-colors">
+ <!-- Extracted colors -->
+ </div>
+ <button class="btn-primary" onclick="useExtractedColors()" style="margin-top: 20px;">
+ Use These Colors
+ </button>
+ </div>
+ </div>
+ </div>
+
+ <!-- Color Blindness Simulator -->
+ <div class="contrast-checker" style="margin-top: 30px;">
+ <h3 class="panel-title">Color Blindness Simulator</h3>
+ <p style="color: var(--text-secondary); margin-bottom: 20px; font-size: 14px;">See how your colors appear to people with different types of color vision</p>
+ 
+ <div class="colorblind-options">
+ <button class="colorblind-option active" onclick="setColorblindMode('normal')">Normal Vision</button>
+ <button class="colorblind-option" onclick="setColorblindMode('protanopia')">Protanopia (Red-Blind)</button>
+ <button class="colorblind-option" onclick="setColorblindMode('deuteranopia')">Deuteranopia (Green-Blind)</button>
+ <button class="colorblind-option" onclick="setColorblindMode('tritanopia')">Tritanopia (Blue-Blind)</button>
+ <button class="colorblind-option" onclick="setColorblindMode('achromatopsia')">Achromatopsia (B&W)</button>
+ </div>
+
+ <div id="colorblind-preview" style="display: flex; gap: 16px; flex-wrap: wrap;">
+ <!-- Preview colors -->
+ </div>
+ </div>
+ </div>
+
+ <!-- Favorites Tab -->
+ <div class="tab-content" id="favorites-tab">
+ <div class="section-header">
+ <h1 class="section-title">Your Favorites</h1>
+ <p class="section-subtitle">Palettes you've saved for later</p>
+ </div>
+ <div class="palette-grid" id="favorites-grid">
+ <div class="empty-state">
+ <div class="empty-state-icon" style="font-size: 48px; color: var(--text-muted);">*</div>
+ <h3>No favorites yet</h3>
+ <p>Start exploring and save palettes you love!</p>
+ </div>
+ </div>
+ </div>
+ </main>
+
+ <!-- Export Modal -->
+ <div class="modal-overlay" id="export-modal">
+ <div class="modal">
+ <div class="modal-header">
+ <h3 class="modal-title">Export Palette</h3>
+ <button class="modal-close" onclick="closeExportModal()">×</button>
+ </div>
+ <div class="modal-body">
+ <!-- Canvas Preview -->
+ <div class="canvas-preview">
+ <canvas id="export-canvas" width="800" height="400"></canvas>
+ </div>
+
+ <div class="export-tabs">
+ <button class="export-tab active" data-export="css">CSS</button>
+ <button class="export-tab" data-export="scss">SCSS</button>
+ <button class="export-tab" data-export="json">JSON</button>
+ <button class="export-tab" data-export="tailwind">Tailwind</button>
+ </div>
+ <pre class="code-block" id="export-code">/* CSS Variables */
+:root {
+ --color-primary: #6366f1;
+ --color-secondary: #818cf8;
+ --color-accent-1: #a5b4fc;
+ --color-accent-2: #c7d2fe;
+ --color-dark: #4338ca;
+}</pre>
+ </div>
+ <div class="modal-footer">
+ <button class="btn-download" onclick="downloadPaletteImage()">Download Image</button>
+ <button class="btn-copy" onclick="copyExportCode()">Copy Code</button>
+ </div>
+ </div>
+ </div>
+
+ <!-- Toast -->
+ <div class="toast" id="toast">
+ <div class="toast-icon" style="font-weight: 700; color: white;">OK</div>
+ <span id="toast-message">Copied to clipboard!</span>
+ </div>
+
+ <script>
+ // Pre-made Palettes - Extensive Collection
+ const palettes = [
+ // DARK THEMES
+ { id: 1, name: "Midnight Luxury", colors: ["#1a1a2e", "#16213e", "#0f3460", "#e94560", "#d4a574"], tags: ["dark", "luxury", "elegant"] },
+ { id: 2, name: "Neon Cyberpunk", colors: ["#0a0a0a", "#00f5ff", "#ff00ff", "#ffff00", "#ff0066"], tags: ["dark", "tech", "colorful"] },
+ { id: 12, name: "Urban Night", colors: ["#2d3436", "#2c3e50", "#8e44ad", "#9b59b6", "#ecf0f1"], tags: ["dark", "tech", "modern"] },
+ { id: 15, name: "Deep Space", colors: ["#0c0c1d", "#1a1a2e", "#16213e", "#0f3460", "#e94560"], tags: ["dark", "tech", "mysterious"] },
+ { id: 9, name: "Monochrome Pro", colors: ["#000000", "#2d3436", "#636e72", "#b2bec3", "#ffffff"], tags: ["minimal", "professional", "dark"] },
+ { id: 19, name: "Dark Matter", colors: ["#0d1117", "#161b22", "#21262d", "#30363d", "#8b949e"], tags: ["dark", "tech", "minimal"] },
+ { id: 20, name: "Midnight Oil", colors: ["#0f1419", "#1a2332", "#243447", "#2f3e50", "#5dade2"], tags: ["dark", "coding", "professional"] },
+ { id: 21, name: "Obsidian", colors: ["#0a0a0a", "#1c1c1c", "#2d2d2d", "#404040", "#f5f5f5"], tags: ["dark", "minimal", "luxury"] },
+ { id: 22, name: "Tokyo Night", colors: ["#1a1b26", "#24283b", "#414868", "#7aa2f7", "#bb9af7"], tags: ["dark", "coding", "neon"] },
+ { id: 23, name: "Dracula", colors: ["#282a36", "#44475a", "#f8f8f2", "#6272a4", "#ff79c6"], tags: ["dark", "coding", "colorful"] },
+ { id: 24, name: "Nord Dark", colors: ["#2e3440", "#3b4252", "#434c5e", "#4c566a", "#88c0d0"], tags: ["dark", "cold", "minimal"] },
+ { id: 25, name: "Gruvbox Dark", colors: ["#282828", "#3c3836", "#504945", "#665c54", "#fabd2f"], tags: ["dark", "warm", "retro"] },
+ { id: 26, name: "One Dark", colors: ["#282c34", "#353b45", "#3e4451", "#21252b", "#61afef"], tags: ["dark", "coding", "tech"] },
+ { id: 27, name: "Synthwave", colors: ["#241b2f", "#2f2138", "#463354", "#ff00ff", "#00ffff"], tags: ["dark", "retro", "neon"] },
+ { id: 28, name: "Matrix", colors: ["#0d0208", "#003b00", "#008f11", "#00ff41", "#0d0208"], tags: ["dark", "tech", "green"] },
+ { id: 29, name: "Vampire", colors: ["#0d0d0d", "#1a1a1a", "#8b0000", "#dc143c", "#ffd700"], tags: ["dark", "gothic", "luxury"] },
+ { id: 30, name: "Nebula", colors: ["#0b0d17", "#1a1d3a", "#2d1b4e", "#764ba2", "#667eea"], tags: ["dark", "space", "purple"] },
+ { id: 31, name: "Black Gold", colors: ["#0a0a0a", "#1a1a1a", "#2d2d2d", "#c9a227", "#ffd700"], tags: ["dark", "luxury", "elegant"] },
+ { id: 32, name: "Dark Forest", colors: ["#0d1f0d", "#1a3a1a", "#2d5a27", "#4a7c59", "#8fbc8f"], tags: ["dark", "nature", "green"] },
+ { id: 33, name: "Midnight Blue", colors: ["#0a1628", "#152238", "#1e3a5f", "#2e5984", "#4a90e2"], tags: ["dark", "blue", "professional"] },
+ { id: 34, name: "Charcoal", colors: ["#1a1a1a", "#2d2d2d", "#404040", "#525252", "#e0e0e0"], tags: ["dark", "minimal", "neutral"] },
+ { id: 35, name: "Dark Rose", colors: ["#1a0a0f", "#2d141c", "#4a1e2c", "#8b3a5c", "#ffc0cb"], tags: ["dark", "pink", "elegant"] },
+ 
+ // LIGHT THEMES
+ { id: 11, name: "Cherry Blossom", colors: ["#fd79a8", "#fdcb6e", "#fab1a0", "#ffeaa7", "#ffffff"], tags: ["nature", "soft", "light"] },
+ { id: 13, name: "Fresh Mint", colors: ["#00b894", "#55efc4", "#81ecec", "#dfe6e9", "#ffffff"], tags: ["nature", "fresh", "light"] },
+ { id: 36, name: "Pure White", colors: ["#ffffff", "#f8f9fa", "#e9ecef", "#dee2e6", "#ced4da"], tags: ["light", "minimal", "clean"] },
+ { id: 37, name: "Creamy", colors: ["#fffdd0", "#fff8dc", "#faf0e6", "#f5f5dc", "#e8dcc4"], tags: ["light", "warm", "soft"] },
+ { id: 38, name: "Pastel Dream", colors: ["#ffeaa7", "#fab1a0", "#ff7675", "#fd79a8", "#e17055"], tags: ["light", "pastel", "soft"] },
+ { id: 39, name: "Baby Blue", colors: ["#e3f2fd", "#bbdefb", "#90caf9", "#64b5f6", "#42a5f5"], tags: ["light", "blue", "soft"] },
+ { id: 40, name: "Soft Pink", colors: ["#fce4ec", "#f8bbd9", "#f48fb1", "#f06292", "#ec407a"], tags: ["light", "pink", "feminine"] },
+ { id: 41, name: "Lavender Mist", colors: ["#f3e5f5", "#e1bee7", "#ce93d8", "#ba68c8", "#ab47bc"], tags: ["light", "purple", "soft"] },
+ { id: 42, name: "Mint Cream", colors: ["#e0f2f1", "#b2dfdb", "#80cbc4", "#4db6ac", "#26a69a"], tags: ["light", "green", "fresh"] },
+ { id: 43, name: "Lemon Chiffon", colors: ["#fffde7", "#fff9c4", "#fff59d", "#fff176", "#ffee58"], tags: ["light", "yellow", "cheerful"] },
+ { id: 44, name: "Peach", colors: ["#fff3e0", "#ffe0b2", "#ffcc80", "#ffb74d", "#ffa726"], tags: ["light", "orange", "warm"] },
+ { id: 45, name: "Cloud White", colors: ["#fafafa", "#f5f5f5", "#eeeeee", "#e0e0e0", "#bdbdbd"], tags: ["light", "minimal", "neutral"] },
+ { id: 46, name: "Ivory", colors: ["#fffff0", "#fffacd", "#fafad2", "#f5f5dc", "#eee8aa"], tags: ["light", "warm", "elegant"] },
+ { id: 47, name: "Snow", colors: ["#fffafa", "#f0f8ff", "#f5fffa", "#f0ffff", "#e6e6fa"], tags: ["light", "cool", "clean"] },
+ { id: 48, name: "Light Slate", colors: ["#f8fafc", "#e2e8f0", "#cbd5e1", "#94a3b8", "#64748b"], tags: ["light", "professional", "neutral"] },
+ { id: 49, name: "Cotton", colors: ["#fafbfc", "#f6f8fa", "#e1e4e8", "#d1d5da", "#959da5"], tags: ["light", "clean", "minimal"] },
+ 
+ // NATURE THEMES
+ { id: 4, name: "Forest Zen", colors: ["#2d3436", "#00b894", "#55efc4", "#dfe6e9", "#0984e3"], tags: ["nature", "calm", "minimal"] },
+ { id: 5, name: "Coral Reef", colors: ["#ff7675", "#fab1a0", "#fdcb6e", "#6c5ce7", "#00cec9"], tags: ["colorful", "nature", "warm"] },
+ { id: 7, name: "Golden Hour", colors: ["#2c3e50", "#e67e22", "#f39c12", "#f1c40f", "#ecf0f1"], tags: ["warm", "elegant", "nature"] },
+ { id: 10, name: "Ocean Breeze", colors: ["#0984e3", "#74b9ff", "#a29bfe", "#dfe6e9", "#00cec9"], tags: ["nature", "calm", "cold"] },
+ { id: 14, name: "Autumn Leaves", colors: ["#e17055", "#d63031", "#fdcb6e", "#e84393", "#2d3436"], tags: ["nature", "warm", "seasonal"] },
+ { id: 50, name: "Amazon", colors: ["#1b5e20", "#2e7d32", "#388e3c", "#43a047", "#66bb6a"], tags: ["nature", "green", "forest"] },
+ { id: 51, name: "Desert Sand", colors: ["#d4a574", "#c9a86c", "#b8956a", "#a0826d", "#8b7355"], tags: ["nature", "warm", "earthy"] },
+ { id: 52, name: "Mountain Lake", colors: ["#1e3a5f", "#2e5984", "#4a90e2", "#87ceeb", "#e0f6ff"], tags: ["nature", "blue", "calm"] },
+ { id: 53, name: "Sunset Beach", colors: ["#ff6b6b", "#feca57", "#ff9ff3", "#48dbfb", "#1dd1a1"], tags: ["nature", "colorful", "sunset"] },
+ { id: 54, name: "Tropical", colors: ["#00b894", "#00cec9", "#0984e3", "#6c5ce7", "#fd79a8"], tags: ["nature", "tropical", "vibrant"] },
+ { id: 55, name: "Savanna", colors: ["#8b6914", "#a0826d", "#c9a86c", "#daa520", "#f4a460"], tags: ["nature", "warm", "earthy"] },
+ { id: 56, name: "Evergreen", colors: ["#013220", "#2d5016", "#3d6b28", "#4a7c38", "#8fbc8f"], tags: ["nature", "green", "forest"] },
+ { id: 57, name: "Volcanic", colors: ["#1a1a1a", "#4a0e0e", "#8b0000", "#cd5c5c", "#ff6347"], tags: ["nature", "warm", "dramatic"] },
+ { id: 58, name: "Glacier", colors: ["#e0f7fa", "#b2ebf2", "#80deea", "#4dd0e1", "#00bcd4"], tags: ["nature", "cold", "ice"] },
+ { id: 59, name: "Meadow", colors: ["#4caf50", "#66bb6a", "#81c784", "#a5d6a7", "#c8e6c9"], tags: ["nature", "green", "fresh"] },
+ { id: 60, name: "Thunderstorm", colors: ["#2c3e50", "#34495e", "#5d6d7e", "#85929e", "#aeb6bf"], tags: ["nature", "dark", "stormy"] },
+ { id: 61, name: "Spring Bloom", colors: ["#f8bbd9", "#e1bee7", "#c5cae9", "#b3e5fc", "#b2dfdb"], tags: ["nature", "spring", "pastel"] },
+ { id: 62, name: "Winter Frost", colors: ["#e3f2fd", "#bbdefb", "#90caf9", "#64b5f6", "#e1f5fe"], tags: ["nature", "winter", "cold"] },
+ { id: 63, name: "Harvest", colors: ["#d35400", "#e67e22", "#f39c12", "#f1c40f", "#27ae60"], tags: ["nature", "autumn", "warm"] },
+ { id: 64, name: "Rainforest", colors: ["#1b5e20", "#2e7d32", "#00695c", "#00838f", "#4db6ac"], tags: ["nature", "green", "tropical"] },
+ { id: 65, name: "Canyon", colors: ["#8b4513", "#a0522d", "#cd853f", "#daa520", "#f4a460"], tags: ["nature", "warm", "earthy"] },
+ 
+ // COLORFUL / VIBRANT
+ { id: 3, name: "Sunset Dreams", colors: ["#ff6b6b", "#feca57", "#ff9ff3", "#54a0ff", "#5f27cd"], tags: ["colorful", "warm", "vibrant"] },
+ { id: 8, name: "Berry Smoothie", colors: ["#6c5ce7", "#a29bfe", "#fd79a8", "#fdcb6e", "#fab1a0"], tags: ["colorful", "sweet", "fun"] },
+ { id: 16, name: "Cotton Candy", colors: ["#ff9ff3", "#feca57", "#ff6b6b", "#48dbfb", "#ffffff"], tags: ["colorful", "sweet", "fun"] },
+ { id: 18, name: "Tropical Punch", colors: ["#ff6b6b", "#feca57", "#48dbfb", "#1dd1a1", "#5f27cd"], tags: ["colorful", "vibrant", "fun"] },
+ { id: 66, name: "Rainbow", colors: ["#ff0000", "#ff7f00", "#ffff00", "#00ff00", "#0000ff"], tags: ["colorful", "vibrant", "rainbow"] },
+ { id: 67, name: "Candy Shop", colors: ["#ff6b9d", "#c44569", "#f8b500", "#4ecdc4", "#556270"], tags: ["colorful", "sweet", "playful"] },
+ { id: 68, name: "Psychedelic", colors: ["#ff006e", "#fb5607", "#ffbe0b", "#8338ec", "#3a86ff"], tags: ["colorful", "trippy", "vibrant"] },
+ { id: 69, name: "Festival", colors: ["#f72585", "#7209b7", "#3a0ca3", "#4361ee", "#4cc9f0"], tags: ["colorful", "party", "neon"] },
+ { id: 70, name: "Pop Art", colors: ["#ff006e", "#ffbe0b", "#3a86ff", "#8338ec", "#ff5400"], tags: ["colorful", "bold", "retro"] },
+ { id: 71, name: "Unicorn", colors: ["#ff9ff3", "#feca57", "#54a0ff", "#5f27cd", "#00d2d3"], tags: ["colorful", "fantasy", "magic"] },
+ { id: 72, name: "Mermaid", colors: ["#00d2d3", "#54a0ff", "#5f27cd", "#9b59b6", "#ff9ff3"], tags: ["colorful", "ocean", "fantasy"] },
+ { id: 73, name: "Dragon Fire", colors: ["#ff0000", "#ff4500", "#ffa500", "#ffff00", "#8b0000"], tags: ["colorful", "warm", "fiery"] },
+ { id: 74, name: "Aurora", colors: ["#00ff87", "#60efff", "#0061ff", "#9d00ff", "#ff0099"], tags: ["colorful", "neon", "space"] },
+ { id: 75, name: "Confetti", colors: ["#ff6b6b", "#feca57", "#48dbfb", "#ff9ff3", "#1dd1a1"], tags: ["colorful", "party", "celebration"] },
+ { id: 76, name: "Bubblegum", colors: ["#ff69b4", "#ff1493", "#ff6eb4", "#ffb6c1", "#ffc0cb"], tags: ["colorful", "pink", "sweet"] },
+ { id: 77, name: "Holi", colors: ["#ff1744", "#f50057", "#d500f9", "#651fff", "#00b0ff"], tags: ["colorful", "indian", "festival"] },
+ 
+ // TECH / MODERN
+ { id: 6, name: "Arctic Chill", colors: ["#2d3436", "#636e72", "#b2bec3", "#dfe6e9", "#74b9ff"], tags: ["cold", "minimal", "tech"] },
+ { id: 17, name: "Slate & Stone", colors: ["#2d3436", "#636e72", "#b2bec3", "#dfe6e9", "#fab1a0"], tags: ["minimal", "professional", "neutral"] },
+ { id: 78, name: "GitHub", colors: ["#24292e", "#2f363d", "#444d56", "#586069", "#6a737d"], tags: ["tech", "coding", "dark"] },
+ { id: 79, name: "VS Code", colors: ["#1e1e1e", "#252526", "#2d2d30", "#3c3c3c", "#007acc"], tags: ["tech", "coding", "dark"] },
+ { id: 80, name: "Stripe", colors: ["#635bff", "#96f7d6", "#00d4ff", "#ff6b6b", "#ffd93d"], tags: ["tech", "modern", "colorful"] },
+ { id: 81, name: "Discord", colors: ["#5865f2", "#7289da", "#99aab5", "#2c2f33", "#23272a"], tags: ["tech", "gaming", "dark"] },
+ { id: 82, name: "Spotify", colors: ["#1db954", "#1ed760", "#191414", "#282828", "#535353"], tags: ["tech", "music", "dark"] },
+ { id: 83, name: "Slack", colors: ["#4a154b", "#36c5f0", "#2eb67d", "#ecb22e", "#e01e5a"], tags: ["tech", "modern", "colorful"] },
+ { id: 84, name: "Notion", colors: ["#000000", "#ffffff", "#f7f6f3", "#e3e2e0", "#6b7280"], tags: ["tech", "minimal", "clean"] },
+ { id: 85, name: "Figma", colors: ["#f24e1e", "#ff7262", "#a259ff", "#1abcfe", "#0acf83"], tags: ["tech", "design", "colorful"] },
+ { id: 86, name: "Linear", colors: ["#5e6ad2", "#8e92de", "#4b5563", "#1f2937", "#111827"], tags: ["tech", "modern", "purple"] },
+ { id: 87, name: "Vercel", colors: ["#000000", "#ffffff", "#fafafa", "#eaeaea", "#999999"], tags: ["tech", "minimal", "monochrome"] },
+ { id: 88, name: "Tailwind", colors: ["#38bdf8", "#818cf8", "#c084fc", "#f472b6", "#fb7185"], tags: ["tech", "modern", "colorful"] },
+ { id: 89, name: "Apple", colors: ["#007aff", "#5856d6", "#af52de", "#ff2d55", "#ff9500"], tags: ["tech", "ios", "colorful"] },
+ { id: 90, name: "Material", colors: ["#2196f3", "#03a9f4", "#00bcd4", "#009688", "#4caf50"], tags: ["tech", "google", "colorful"] },
+ { id: 91, name: "Cyber", colors: ["#0a0a0a", "#00ff41", "#00d9ff", "#ff00ff", "#ffff00"], tags: ["tech", "cyberpunk", "neon"] },
+ { id: 92, name: "AI Gradient", colors: ["#667eea", "#764ba2", "#f093fb", "#f5576c", "#4facfe"], tags: ["tech", "gradient", "modern"] },
+ { id: 93, name: "Quantum", colors: ["#0c0c1d", "#1a1a2e", "#16213e", "#e94560", "#0f3460"], tags: ["tech", "space", "dark"] },
+ { id: 94, name: "Silicon Valley", colors: ["#4285f4", "#34a853", "#fbbc05", "#ea4335", "#757575"], tags: ["tech", "google", "colorful"] },
+ 
+ // RETRO / VINTAGE
+ { id: 95, name: "Retro 80s", colors: ["#ff006e", "#8338ec", "#3a86ff", "#fb5607", "#ffbe0b"], tags: ["retro", "80s", "colorful"] },
+ { id: 96, name: "Vintage", colors: ["#8b4513", "#a0522d", "#cd853f", "#d2b48c", "#f5deb3"], tags: ["retro", "sepia", "warm"] },
+ { id: 97, name: "Polaroid", colors: ["#f5f5dc", "#faf0e6", "#ffe4c4", "#deb887", "#d2691e"], tags: ["retro", "warm", "soft"] },
+ { id: 98, name: "VHS", colors: ["#1a1a2e", "#16213e", "#0f3460", "#e94560", "#d4a574"], tags: ["retro", "vhs", "dark"] },
+ { id: 99, name: "Cassette", colors: ["#2c3e50", "#34495e", "#7f8c8d", "#95a5a6", "#bdc3c7"], tags: ["retro", "80s", "minimal"] },
+ { id: 100, name: "Arcade", colors: ["#ff0000", "#ffff00", "#00ff00", "#00ffff", "#ff00ff"], tags: ["retro", "gaming", "neon"] },
+ { id: 101, name: "Disco", colors: ["#ff006e", "#8338ec", "#3a86ff", "#06ffa5", "#ffbe0b"], tags: ["retro", "70s", "disco"] },
+ { id: 102, name: "Hippie", colors: ["#d4a574", "#8fbc8f", "#cd853f", "#bc8f8f", "#deb887"], tags: ["retro", "70s", "earthy"] },
+ { id: 103, name: "Art Deco", colors: ["#000000", "#ffd700", "#ff8c00", "#4a0e4e", "#1a1a2e"], tags: ["retro", "20s", "luxury"] },
+ { id: 104, name: "Film Noir", colors: ["#0a0a0a", "#1a1a1a", "#2d2d2d", "#404040", "#ffffff"], tags: ["retro", "noir", "blackwhite"] },
+ { id: 105, name: "Pin Up", colors: ["#ff006e", "#ffbe0b", "#ff5400", "#ff1744", "#f50057"], tags: ["retro", "50s", "colorful"] },
+ { id: 106, name: "Soviet", colors: ["#cc0000", "#ffd700", "#ffffff", "#8b0000", "#ffcc00"], tags: ["retro", "propaganda", "bold"] },
+ { id: 107, name: "Motel", colors: ["#ff6b6b", "#feca57", "#48dbfb", "#ff9ff3", "#54a0ff"], tags: ["retro", "50s", "pastel"] },
+ 
+ // LUXURY / ELEGANT
+ { id: 108, name: "Royal", colors: ["#1a1a2e", "#4a0e4e", "#6a1b9a", "#8e24aa", "#ffd700"], tags: ["luxury", "purple", "elegant"] },
+ { id: 109, name: "Champagne", colors: ["#f7e7ce", "#f0e68c", "#d4af37", "#c5b358", "#b8860b"], tags: ["luxury", "gold", "elegant"] },
+ { id: 110, name: "Platinum", colors: ["#e5e4e2", "#d3d3d3", "#c0c0c0", "#a9a9a9", "#808080"], tags: ["luxury", "silver", "minimal"] },
+ { id: 111, name: "Velvet", colors: ["#4a0e4e", "#6a1b9a", "#8e24aa", "#ab47bc", "#ce93d8"], tags: ["luxury", "purple", "soft"] },
+ { id: 112, name: "Marble", colors: ["#f5f5f5", "#e8e8e8", "#d3d3d3", "#a9a9a9", "#696969"], tags: ["luxury", "minimal", "neutral"] },
+ { id: 113, name: "Diamond", colors: ["#e0ffff", "#afeeee", "#7fffd4", "#40e0d0", "#00ced1"], tags: ["luxury", "blue", "sparkle"] },
+ { id: 114, name: "Ruby", colors: ["#8b0000", "#a52a2a", "#cd5c5c", "#dc143c", "#ff6347"], tags: ["luxury", "red", "passion"] },
+ { id: 115, name: "Emerald", colors: ["#013220", "#006400", "#228b22", "#2e8b57", "#3cb371"], tags: ["luxury", "green", "rich"] },
+ { id: 116, name: "Sapphire", colors: ["#0f52ba", "#1e90ff", "#4169e1", "#0000cd", "#000080"], tags: ["luxury", "blue", "deep"] },
+ { id: 117, name: "Pearl", colors: ["#fdfcf0", "#f0ead6", "#e8dcc4", "#d4c4a8", "#c0b283"], tags: ["luxury", "cream", "soft"] },
+ { id: 118, name: "Tiffany", colors: ["#0abab5", "#81d8d0", "#a0e6de", "#b2e5d6", "#e0f2f1"], tags: ["luxury", "blue", "elegant"] },
+ { id: 119, name: "Hermes", colors: ["#ff6600", "#ff8c00", "#ffa500", "#ffb347", "#ffcc99"], tags: ["luxury", "orange", "premium"] },
+ 
+ // WARM / COZY
+ { id: 120, name: "Coffee", colors: ["#3e2723", "#4e342e", "#5d4037", "#795548", "#a1887f"], tags: ["warm", "brown", "cozy"] },
+ { id: 121, name: "Caramel", colors: ["#8b4513", "#a0522d", "#cd853f", "#d2691e", "#daa520"], tags: ["warm", "sweet", "cozy"] },
+ { id: 122, name: "Hearth", colors: ["#8b0000", "#a52a2a", "#cd5c5c", "#d2691e", "#ff8c00"], tags: ["warm", "fire", "cozy"] },
+ { id: 123, name: "Cinnamon", colors: ["#8b4513", "#a0522d", "#d2691e", "#daa520", "#f4a460"], tags: ["warm", "spice", "cozy"] },
+ { id: 124, name: "Pumpkin Spice", colors: ["#d35400", "#e67e22", "#f39c12", "#f1c40f", "#e74c3c"], tags: ["warm", "autumn", "cozy"] },
+ { id: 125, name: "Hot Cocoa", colors: ["#3e2723", "#4e342e", "#5d4037", "#8d6e63", "#bcaaa4"], tags: ["warm", "chocolate", "cozy"] },
+ { id: 126, name: "Bonfire", colors: ["#8b0000", "#ff4500", "#ff6347", "#ffa500", "#ffd700"], tags: ["warm", "fire", "autumn"] },
+ { id: 127, name: "Terracotta", colors: ["#e2725b", "#d4755f", "#c67b5c", "#b8835e", "#a88b60"], tags: ["warm", "earthy", "mediterranean"] },
+ { id: 128, name: "Spice Route", colors: ["#8b4513", "#a0522d", "#cd853f", "#daa520", "#d2691e"], tags: ["warm", "exotic", "rich"] },
+ 
+ // COLD / CALM
+ { id: 129, name: "Ice", colors: ["#e0f7fa", "#b2ebf2", "#80deea", "#4dd0e1", "#26c6da"], tags: ["cold", "blue", "calm"] },
+ { id: 130, name: "Frost", colors: ["#f0f8ff", "#e6e6fa", "#b0e0e6", "#add8e6", "#87ceeb"], tags: ["cold", "blue", "soft"] },
+ { id: 131, name: "Steel", colors: ["#2c3e50", "#34495e", "#5d6d7e", "#85929e", "#aeb6bf"], tags: ["cold", "blue", "professional"] },
+ { id: 132, name: "Arctic", colors: ["#e3f2fd", "#bbdefb", "#90caf9", "#64b5f6", "#42a5f5"], tags: ["cold", "blue", "minimal"] },
+ { id: 133, name: "Glacier", colors: ["#b3e5fc", "#81d4fa", "#4fc3f7", "#29b6f6", "#03a9f4"], tags: ["cold", "blue", "fresh"] },
+ { id: 134, name: "Winter Sky", colors: ["#e3f2fd", "#bbdefb", "#90caf9", "#e1f5fe", "#b3e5fc"], tags: ["cold", "blue", "peaceful"] },
+ { id: 135, name: "Mint Ice", colors: ["#e0f2f1", "#b2dfdb", "#80cbc4", "#4db6ac", "#26a69a"], tags: ["cold", "green", "fresh"] },
+ { id: 136, name: "Lavender Ice", colors: ["#f3e5f5", "#e1bee7", "#ce93d8", "#ba68c8", "#ab47bc"], tags: ["cold", "purple", "soft"] },
+ 
+ // MONOCHROME
+ { id: 137, name: "Pure Black", colors: ["#000000", "#1a1a1a", "#333333", "#4d4d4d", "#666666"], tags: ["monochrome", "dark", "minimal"] },
+ { id: 138, name: "Pure White", colors: ["#ffffff", "#f2f2f2", "#e6e6e6", "#d9d9d9", "#cccccc"], tags: ["monochrome", "light", "clean"] },
+ { id: 139, name: "Gray Scale", colors: ["#000000", "#404040", "#808080", "#bfbfbf", "#ffffff"], tags: ["monochrome", "neutral", "professional"] },
+ { id: 140, name: "Slate", colors: ["#1e293b", "#334155", "#475569", "#64748b", "#94a3b8"], tags: ["monochrome", "bluegray", "modern"] },
+ { id: 141, name: "Zinc", colors: ["#18181b", "#27272a", "#3f3f46", "#52525b", "#71717a"], tags: ["monochrome", "neutral", "tech"] },
+ { id: 142, name: "Stone", colors: ["#1c1917", "#292524", "#44403c", "#57534e", "#78716c"], tags: ["monochrome", "brown", "warm"] },
+ 
+ // NEON / GLOW
+ { id: 143, name: "Neon Pink", colors: ["#ff006e", "#ff1493", "#ff69b4", "#ff85c1", "#ffa6c9"], tags: ["neon", "pink", "vibrant"] },
+ { id: 144, name: "Neon Blue", colors: ["#00ffff", "#00d9ff", "#00bfff", "#1e90ff", "#0080ff"], tags: ["neon", "blue", "vibrant"] },
+ { id: 145, name: "Neon Green", colors: ["#39ff14", "#00ff41", "#00ff7f", "#7fff00", "#adff2f"], tags: ["neon", "green", "vibrant"] },
+ { id: 146, name: "Neon Purple", colors: ["#bf00ff", "#9400d3", "#8b00ff", "#9932cc", "#ba55d3"], tags: ["neon", "purple", "vibrant"] },
+ { id: 147, name: "Neon Orange", colors: ["#ff4500", "#ff6347", "#ff7f50", "#ff8c00", "#ffa500"], tags: ["neon", "orange", "vibrant"] },
+ { id: 148, name: "Neon Yellow", colors: ["#ffff00", "#ffff33", "#ffff66", "#ffff99", "#ffffcc"], tags: ["neon", "yellow", "bright"] },
+ 
+ // FOOD & DRINK
+ { id: 149, name: "Strawberry", colors: ["#ff0000", "#ff6b6b", "#ff8c69", "#ffa07a", "#ffb6c1"], tags: ["food", "red", "sweet"] },
+ { id: 150, name: "Blueberry", colors: ["#0000ff", "#4169e1", "#6495ed", "#87cefa", "#b0e0e6"], tags: ["food", "blue", "sweet"] },
+ { id: 151, name: "Lemon", colors: ["#ffff00", "#fff44f", "#fffacd", "#fafad2", "#ffffe0"], tags: ["food", "yellow", "citrus"] },
+ { id: 152, name: "Mint Tea", colors: ["#00b894", "#55efc4", "#81ecec", "#b8e994", "#d4edda"], tags: ["food", "green", "fresh"] },
+ { id: 153, name: "Chocolate", colors: ["#3e2723", "#4e342e", "#5d4037", "#795548", "#8d6e63"], tags: ["food", "brown", "sweet"] },
+ { id: 154, name: "Vanilla", colors: ["#f3e5ab", "#f5f5dc", "#faf0e6", "#fff8dc", "#fffacd"], tags: ["food", "cream", "sweet"] },
+ { id: 155, name: "Grape", colors: ["#4b0082", "#6a0dad", "#8a2be2", "#9370db", "#ba55d3"], tags: ["food", "purple", "sweet"] },
+ { id: 156, name: "Watermelon", colors: ["#ff1744", "#ff4569", "#ff6b6b", "#4caf50", "#81c784"], tags: ["food", "red", "green"] },
+ { id: 157, name: "Peach", colors: ["#ffdab9", "#ffe4c4", "#ffcba4", "#ffcc99", "#ffb6c1"], tags: ["food", "orange", "soft"] },
+ { id: 158, name: "Coconut", colors: ["#fff5ee", "#faf0e6", "#f5f5dc", "#e8dcc4", "#d4c4a8"], tags: ["food", "white", "tropical"] },
+ 
+ // SEASONAL
+ { id: 159, name: "Spring", colors: ["#ffb7b2", "#ffdac1", "#e2f0cb", "#b5ead7", "#c7ceea"], tags: ["seasonal", "spring", "pastel"] },
+ { id: 160, name: "Summer", colors: ["#ff6b6b", "#feca57", "#48dbfb", "#ff9ff3", "#54a0ff"], tags: ["seasonal", "summer", "vibrant"] },
+ { id: 161, name: "Fall", colors: ["#d35400", "#e67e22", "#f39c12", "#c0392b", "#8e44ad"], tags: ["seasonal", "autumn", "warm"] },
+ { id: 162, name: "Winter", colors: ["#e3f2fd", "#bbdefb", "#90caf9", "#e1f5fe", "#ffffff"], tags: ["seasonal", "winter", "cold"] },
+ { id: 163, name: "Christmas", colors: ["#ff0000", "#008000", "#ffffff", "#ffd700", "#8b0000"], tags: ["seasonal", "christmas", "festive"] },
+ { id: 164, name: "Halloween", colors: ["#ff6600", "#000000", "#800080", "#008000", "#ffff00"], tags: ["seasonal", "halloween", "spooky"] },
+ { id: 165, name: "Valentine", colors: ["#ff1744", "#f50057", "#ff6b6b", "#ffc0cb", "#ffebee"], tags: ["seasonal", "valentine", "love"] },
+ { id: 166, name: "Easter", colors: ["#f8bbd9", "#e1bee7", "#c5cae9", "#b3e5fc", "#b2dfdb"], tags: ["seasonal", "easter", "pastel"] },
+ { id: 167, name: "New Year", colors: ["#ffd700", "#c0c0c0", "#000000", "#ffffff", "#ffd700"], tags: ["seasonal", "newyear", "celebration"] },
+ { id: 168, name: "Thanksgiving", colors: ["#d35400", "#e67e22", "#f39c12", "#8b4513", "#cd853f"], tags: ["seasonal", "thanksgiving", "warm"] },
+ 
+ // GEMSTONES & MINERALS
+ { id: 169, name: "Amethyst", colors: ["#4a0e4e", "#6a1b9a", "#8e24aa", "#ab47bc", "#e1bee7"], tags: ["gemstone", "purple", "luxury"] },
+ { id: 170, name: "Opal", colors: ["#b2ebf2", "#80deea", "#4dd0e1", "#26c6da", "#00bcd4"], tags: ["gemstone", "blue", "iridescent"] },
+ { id: 171, name: "Garnet", colors: ["#8b0000", "#a52a2a", "#cd5c5c", "#b22222", "#dc143c"], tags: ["gemstone", "red", "deep"] },
+ { id: 172, name: "Topaz", colors: ["#ffd700", "#ffcc00", "#ffdb58", "#f0e68c", "#fffacd"], tags: ["gemstone", "yellow", "bright"] },
+ { id: 173, name: "Aquamarine", colors: ["#7fffd4", "#66cdaa", "#5f9ea0", "#00ced1", "#20b2aa"], tags: ["gemstone", "teal", "fresh"] },
+ { id: 174, name: "Citrine", colors: ["#e4d00a", "#ffd700", "#ffaa00", "#ff8c00", "#ffa500"], tags: ["gemstone", "orange", "warm"] },
+ { id: 175, name: "Turquoise", colors: ["#40e0d0", "#00ced1", "#48d1cc", "#20b2aa", "#008b8b"], tags: ["gemstone", "teal", "vibrant"] },
+ { id: 176, name: "Moonstone", colors: ["#e6e6fa", "#d8bfd8", "#dda0dd", "#ee82ee", "#da70d6"], tags: ["gemstone", "purple", "mystical"] },
+ { id: 177, name: "Jade", colors: ["#00a86b", "#2e8b57", "#3cb371", "#00b894", "#55efc4"], tags: ["gemstone", "green", "oriental"] },
+ { id: 178, name: "Ruby", colors: ["#9b111e", "#e0115f", "#ff0066", "#ff1493", "#ffb6c1"], tags: ["gemstone", "red", "passion"] },
+ { id: 179, name: "Onyx", colors: ["#000000", "#1a1a1a", "#2d2d2d", "#404040", "#ffffff"], tags: ["gemstone", "black", "elegant"] },
+ { id: 180, name: "Pearl White", colors: ["#fdfcf0", "#f8f6f0", "#f5f5dc", "#f0ead6", "#e8e4c9"], tags: ["gemstone", "white", "elegant"] },
+ { id: 181, name: "Lapis Lazuli", colors: ["#1e3a5f", "#1e4d8c", "#2e5c8a", "#26619c", "#4169e1"], tags: ["gemstone", "blue", "royal"] },
+ { id: 182, name: "Coral Stone", colors: ["#ff7f50", "#ff6347", "#ff4500", "#fa8072", "#ffa07a"], tags: ["gemstone", "orange", "organic"] },
+ { id: 183, name: "Peridot", colors: ["#90ee90", "#7cfc00", "#32cd32", "#9acd32", "#6b8e23"], tags: ["gemstone", "green", "fresh"] },
+ { id: 184, name: "Tiger Eye", colors: ["#b8860b", "#daa520", "#cd853f", "#d2691e", "#8b4513"], tags: ["gemstone", "brown", "warm"] },
+ { id: 185, name: "Obsidian", colors: ["#000000", "#1a1a1a", "#2d2d2d", "#1c1c1c", "#0d0d0d"], tags: ["gemstone", "black", "mysterious"] },
+ { id: 186, name: "Quartz", colors: ["#ffffff", "#f8f8ff", "#f5f5f5", "#fffafa", "#f0f0f0"], tags: ["gemstone", "white", "pure"] },
+ 
+ // FANTASY & MAGIC
+ { id: 187, name: "Dragon Scale", colors: ["#2d3436", "#00b894", "#55efc4", "#00cec9", "#0984e3"], tags: ["fantasy", "dragon", "mystical"] },
+ { id: 188, name: "Fairy Dust", colors: ["#ff9ff3", "#feca57", "#ff6b6b", "#48dbfb", "#1dd1a1"], tags: ["fantasy", "magic", "sparkle"] },
+ { id: 189, name: "Enchanted Forest", colors: ["#1b5e20", "#2e7d32", "#00695c", "#4a148c", "#7b1fa2"], tags: ["fantasy", "forest", "magic"] },
+ { id: 190, name: "Phoenix Fire", colors: ["#ff0000", "#ff4500", "#ffa500", "#ffff00", "#ff1493"], tags: ["fantasy", "fire", "rebirth"] },
+ { id: 191, name: "Mermaid Lagoon", colors: ["#00b894", "#00cec9", "#0984e3", "#6c5ce7", "#fd79a8"], tags: ["fantasy", "ocean", "magic"] },
+ { id: 192, name: "Witch's Brew", colors: ["#2d3436", "#00b894", "#55efc4", "#a29bfe", "#fd79a8"], tags: ["fantasy", "magic", "halloween"] },
+ { id: 193, name: "Unicorn Magic", colors: ["#ff9ff3", "#feca57", "#54a0ff", "#5f27cd", "#00d2d3"], tags: ["fantasy", "unicorn", "rainbow"] },
+ { id: 194, name: "Elven Realm", colors: ["#2d3436", "#00b894", "#55efc4", "#81ecec", "#fab1a0"], tags: ["fantasy", "elf", "nature"] },
+ { id: 195, name: "Dark Magic", colors: ["#0a0a0a", "#1a1a2e", "#4a0e4e", "#6a1b9a", "#8e24aa"], tags: ["fantasy", "dark", "magic"] },
+ { id: 196, name: "Crystal Cave", colors: ["#e0f7fa", "#b2ebf2", "#80deea", "#4dd0e1", "#26c6da"], tags: ["fantasy", "crystal", "blue"] },
+ { id: 197, name: "Pixie Dust", colors: ["#ff00ff", "#00ffff", "#ffff00", "#ff69b4", "#00ff00"], tags: ["fantasy", "pixie", "sparkle"] },
+ { id: 198, name: "Vampire Lair", colors: ["#0d0d0d", "#1a1a1a", "#8b0000", "#dc143c", "#ffd700"], tags: ["fantasy", "vampire", "gothic"] },
+ { id: 199, name: "Wizard Tower", colors: ["#1a1a2e", "#4a0e4e", "#6a1b9a", "#8e24aa", "#ffd700"], tags: ["fantasy", "wizard", "magic"] },
+ { id: 200, name: "Fae Realm", colors: ["#ff9ff3", "#feca57", "#55efc4", "#a29bfe", "#fdcb6e"], tags: ["fantasy", "fairy", "ethereal"] },
+ 
+ // SPACE & COSMOS
+ { id: 201, name: "Nebula Cloud", colors: ["#4a0e4e", "#6a1b9a", "#8e24aa", "#ab47bc", "#ce93d8"], tags: ["space", "nebula", "purple"] },
+ { id: 202, name: "Supernova", colors: ["#ff006e", "#ffbe0b", "#ff5400", "#ff1744", "#f50057"], tags: ["space", "explosion", "bright"] },
+ { id: 203, name: "Black Hole", colors: ["#000000", "#1a1a1a", "#2d2d2d", "#404040", "#8b0000"], tags: ["space", "black", "mysterious"] },
+ { id: 204, name: "Milky Way", colors: ["#1a1a2e", "#4a0e4e", "#6a1b9a", "#ffffff", "#e0e0e0"], tags: ["space", "galaxy", "stars"] },
+ { id: 205, name: "Aurora Borealis", colors: ["#00ff87", "#60efff", "#0061ff", "#9d00ff", "#ff0099"], tags: ["space", "aurora", "northern"] },
+ { id: 206, name: "Solar Flare", colors: ["#ffff00", "#ffa500", "#ff4500", "#ff0000", "#ffffe0"], tags: ["space", "sun", "fire"] },
+ { id: 207, name: "Comet Tail", colors: ["#e0f7fa", "#b2ebf2", "#80deea", "#4dd0e1", "#ffffff"], tags: ["space", "comet", "ice"] },
+ { id: 208, name: "Galaxy Core", colors: ["#4a148c", "#6a1b9a", "#8e24aa", "#ab47bc", "#ffd700"], tags: ["space", "galaxy", "bright"] },
+ { id: 209, name: "Star Dust", colors: ["#e0e0e0", "#f5f5f5", "#ffffff", "#fafafa", "#f0f0f0"], tags: ["space", "stars", "silver"] },
+ { id: 210, name: "Eclipse", colors: ["#000000", "#1a1a1a", "#ff8c00", "#ffa500", "#ffd700"], tags: ["space", "eclipse", "dramatic"] },
+ { id: 211, name: "Mars Red", colors: ["#8b0000", "#a52a2a", "#cd5c5c", "#b22222", "#dc143c"], tags: ["space", "mars", "red"] },
+ { id: 212, name: "Jupiter Storm", colors: ["#d2691e", "#cd853f", "#daa520", "#b8860b", "#8b4513"], tags: ["space", "jupiter", "storm"] },
+ { id: 213, name: "Saturn Rings", colors: ["#f5deb3", "#deb887", "#d2b48c", "#c0c0c0", "#d3d3d3"], tags: ["space", "saturn", "gold"] },
+ { id: 214, name: "Alien World", colors: ["#00ff00", "#39ff14", "#7fff00", "#76ff03", "#64dd17"], tags: ["space", "alien", "green"] },
+ 
+ // MOODS & EMOTIONS
+ { id: 215, name: "Serenity", colors: ["#e3f2fd", "#bbdefb", "#90caf9", "#64b5f6", "#42a5f5"], tags: ["mood", "calm", "peaceful"] },
+ { id: 216, name: "Energy", colors: ["#ff0000", "#ff4500", "#ffa500", "#ffff00", "#ff1493"], tags: ["mood", "energetic", "bright"] },
+ { id: 217, name: "Melancholy", colors: ["#2c3e50", "#34495e", "#5d6d7e", "#85929e", "#aeb6bf"], tags: ["mood", "sad", "blue"] },
+ { id: 218, name: "Joy", colors: ["#ffeb3b", "#ff9800", "#ff5722", "#e91e63", "#9c27b0"], tags: ["mood", "happy", "colorful"] },
+ { id: 219, name: "Mystery", colors: ["#1a1a2e", "#16213e", "#0f3460", "#533483", "#e94560"], tags: ["mood", "mysterious", "dark"] },
+ { id: 220, name: "Passion", colors: ["#8b0000", "#a52a2a", "#cd5c5c", "#dc143c", "#ff1493"], tags: ["mood", "love", "intense"] },
+ { id: 221, name: "Tranquility", colors: ["#e0f2f1", "#b2dfdb", "#80cbc4", "#4db6ac", "#26a69a"], tags: ["mood", "peaceful", "green"] },
+ { id: 222, name: "Anger", colors: ["#8b0000", "#ff0000", "#ff4500", "#dc143c", "#b22222"], tags: ["mood", "angry", "red"] },
+ { id: 223, name: "Hope", colors: ["#81c784", "#a5d6a7", "#c8e6c9", "#e8f5e9", "#4caf50"], tags: ["mood", "optimistic", "green"] },
+ { id: 224, name: "Fear", colors: ["#000000", "#1a1a1a", "#2d2d2d", "#800080", "#4b0082"], tags: ["mood", "scary", "dark"] },
+ { id: 225, name: "Nostalgia", colors: ["#d2691e", "#cd853f", "#daa520", "#b8860b", "#deb887"], tags: ["mood", "vintage", "warm"] },
+ { id: 226, name: "Excitement", colors: ["#ff006e", "#ffbe0b", "#ff5400", "#8338ec", "#3a86ff"], tags: ["mood", "thrill", "vibrant"] },
+ { id: 227, name: "Loneliness", colors: ["#2c3e50", "#34495e", "#5d6d7e", "#7f8c8d", "#95a5a6"], tags: ["mood", "sad", "gray"] },
+ { id: 228, name: "Confidence", colors: ["#000080", "#0000cd", "#0000ff", "#4169e1", "#1e90ff"], tags: ["mood", "bold", "blue"] },
+ { id: 229, name: "Curiosity", colors: ["#9c27b0", "#673ab7", "#3f51b5", "#2196f3", "#03a9f4"], tags: ["mood", "inquisitive", "purple"] },
+ 
+ // CULTURAL & REGIONAL
+ { id: 230, name: "Moroccan", colors: ["#d35400", "#e67e22", "#f39c12", "#c0392b", "#8e44ad"], tags: ["cultural", "morocco", "warm"] },
+ { id: 231, name: "Japanese", colors: ["#c41e3a", "#ffffff", "#1a1a1a", "#ffd700", "#ff6b6b"], tags: ["cultural", "japan", "elegant"] },
+ { id: 232, name: "Indian", colors: ["#ff9933", "#ffffff", "#138808", "#000080", "#ff0000"], tags: ["cultural", "india", "colorful"] },
+ { id: 233, name: "Greek", colors: ["#0066cc", "#ffffff", "#1a1a1a", "#ffd700", "#87ceeb"], tags: ["cultural", "greece", "mediterranean"] },
+ { id: 234, name: "Mexican", colors: ["#006847", "#ffffff", "#ce1126", "#ffd700", "#ff6b6b"], tags: ["cultural", "mexico", "vibrant"] },
+ { id: 235, name: "Scandinavian", colors: ["#f0f4f8", "#d9e2ec", "#bcccdc", "#9fb3c8", "#829ab1"], tags: ["cultural", "scandinavia", "minimal"] },
+ { id: 236, name: "African", colors: ["#8b4513", "#d2691e", "#daa520", "#228b22", "#800080"], tags: ["cultural", "africa", "earthy"] },
+ { id: 237, name: "Chinese", colors: ["#de2910", "#ffde00", "#000000", "#ffffff", "#dc143c"], tags: ["cultural", "china", "red"] },
+ { id: 238, name: "Tibetan", colors: ["#ff6600", "#8b4513", "#ffd700", "#ffffff", "#dc143c"], tags: ["cultural", "tibet", "spiritual"] },
+ { id: 239, name: "Nordic", colors: ["#1e3a5f", "#4a90e2", "#87ceeb", "#e0f6ff", "#f0f8ff"], tags: ["cultural", "nordic", "cold"] },
+ { id: 240, name: "Mediterranean", colors: ["#0066cc", "#ffffff", "#ffd700", "#ff6b6b", "#4caf50"], tags: ["cultural", "mediterranean", "sunny"] },
+ { id: 241, name: "Bohemian", colors: ["#d2691e", "#cd853f", "#daa520", "#8b4513", "#800080"], tags: ["cultural", "boho", "earthy"] },
+ { id: 242, name: "Arabian", colors: ["#006400", "#ffd700", "#dc143c", "#ffffff", "#8b4513"], tags: ["cultural", "arabian", "rich"] },
+ { id: 243, name: "Caribbean", colors: ["#00ced1", "#40e0d0", "#48d1cc", "#20b2aa", "#008b8b"], tags: ["cultural", "caribbean", "tropical"] },
+ { id: 244, name: "Korean", colors: ["#0047a0", "#ffffff", "#cd2e3a", "#000000", "#ffd700"], tags: ["cultural", "korea", "modern"] },
+ { id: 245, name: "Brazilian", colors: ["#009c3b", "#ffdf00", "#002776", "#ffffff", "#009739"], tags: ["cultural", "brazil", "vibrant"] },
+ 
+ // ART MOVEMENTS
+ { id: 246, name: "Impressionist", colors: ["#e6e6fa", "#dda0dd", "#d8bfd8", "#dda0dd", "#ee82ee"], tags: ["art", "impressionism", "soft"] },
+ { id: 247, name: "Cubist", colors: ["#2c3e50", "#34495e", "#7f8c8d", "#95a5a6", "#bdc3c7"], tags: ["art", "cubism", "geometric"] },
+ { id: 248, name: "Surrealist", colors: ["#4a0e4e", "#6a1b9a", "#8e24aa", "#ab47bc", "#ce93d8"], tags: ["art", "surrealism", "dreamy"] },
+ { id: 249, name: "Pop Art", colors: ["#ff0000", "#ffff00", "#0000ff", "#ff00ff", "#00ff00"], tags: ["art", "pop", "bold"] },
+ { id: 250, name: "Art Nouveau", colors: ["#2e8b57", "#3cb371", "#90ee90", "#98fb98", "#8fbc8f"], tags: ["art", "nouveau", "organic"] },
+ { id: 251, name: "Bauhaus", colors: ["#ff0000", "#ffff00", "#0000ff", "#000000", "#ffffff"], tags: ["art", "bauhaus", "primary"] },
+ { id: 252, name: "Minimalist", colors: ["#ffffff", "#f5f5f5", "#e0e0e0", "#bdbdbd", "#000000"], tags: ["art", "minimalism", "clean"] },
+ { id: 253, name: "Baroque", colors: ["#8b0000", "#a52a2a", "#cd5c5c", "#ffd700", "#daa520"], tags: ["art", "baroque", "rich"] },
+ { id: 254, name: "Renaissance", colors: ["#8b4513", "#d2691e", "#cd853f", "#daa520", "#b8860b"], tags: ["art", "renaissance", "warm"] },
+ { id: 255, name: "Gothic", colors: ["#000000", "#1a1a1a", "#2d2d2d", "#800080", "#4b0082"], tags: ["art", "gothic", "dark"] },
+ { id: 256, name: "Romantic", colors: ["#ff69b4", "#ff1493", "#ffb6c1", "#ffc0cb", "#ffe4e1"], tags: ["art", "romanticism", "pink"] },
+ { id: 257, name: "Abstract", colors: ["#ff006e", "#ffbe0b", "#8338ec", "#3a86ff", "#fb5607"], tags: ["art", "abstract", "colorful"] },
+ { id: 258, name: "Street Art", colors: ["#ff006e", "#00ff00", "#00ffff", "#ff00ff", "#ffff00"], tags: ["art", "graffiti", "urban"] },
+ 
+ // BEACH & OCEAN
+ { id: 259, name: "Maldives", colors: ["#00b894", "#00cec9", "#0984e3", "#74b9ff", "#dfe6e9"], tags: ["beach", "tropical", "blue"] },
+ { id: 260, name: "Hawaii", colors: ["#ff6b6b", "#feca57", "#48dbfb", "#ff9ff3", "#1dd1a1"], tags: ["beach", "hawaiian", "colorful"] },
+ { id: 261, name: "Santorini", colors: ["#0066cc", "#ffffff", "#1a1a1a", "#87ceeb", "#e0f6ff"], tags: ["beach", "greek", "bluewhite"] },
+ { id: 262, name: "Bora Bora", colors: ["#00ced1", "#40e0d0", "#48d1cc", "#20b2aa", "#008b8b"], tags: ["beach", "tropical", "turquoise"] },
+ { id: 263, name: "Coral Reef", colors: ["#ff7f50", "#ff6347", "#ff4500", "#fa8072", "#ffa07a"], tags: ["ocean", "coral", "underwater"] },
+ { id: 264, name: "Deep Ocean", colors: ["#000080", "#00008b", "#0000cd", "#0000ff", "#1e90ff"], tags: ["ocean", "deep", "blue"] },
+ { id: 265, name: "Beach Sand", colors: ["#f5deb3", "#deb887", "#d2b48c", "#c2b280", "#d4c4a8"], tags: ["beach", "sand", "warm"] },
+ { id: 266, name: "Palm Tree", colors: ["#228b22", "#2e8b57", "#3cb371", "#8fbc8f", "#f5deb3"], tags: ["beach", "tropical", "green"] },
+ { id: 267, name: "Sunset Beach", colors: ["#ff6b6b", "#feca57", "#ff9ff3", "#48dbfb", "#54a0ff"], tags: ["beach", "sunset", "colorful"] },
+ { id: 268, name: "Tidal Pool", colors: ["#20b2aa", "#008b8b", "#008080", "#00ced1", "#48d1cc"], tags: ["ocean", "tide", "teal"] },
+ 
+ // MILITARY & CAMO
+ { id: 269, name: "Army Green", colors: ["#4b5320", "#556b2f", "#6b8e23", "#808000", "#9acd32"], tags: ["military", "camo", "green"] },
+ { id: 270, name: "Desert Camo", colors: ["#c2b280", "#d4c4a8", "#c19a6b", "#a0522d", "#8b4513"], tags: ["military", "desert", "camo"] },
+ { id: 271, name: "Navy Blue", colors: ["#000080", "#00008b", "#0000cd", "#191970", "#1e3a5f"], tags: ["military", "navy", "blue"] },
+ { id: 272, name: "Urban Camo", colors: ["#696969", "#808080", "#a9a9a9", "#c0c0c0", "#d3d3d3"], tags: ["military", "urban", "gray"] },
+ { id: 273, name: "Digital Camo", colors: ["#2f4f4f", "#556b2f", "#6b8e23", "#808000", "#9acd32"], tags: ["military", "digital", "modern"] },
+ { id: 274, name: "Winter Camo", colors: ["#ffffff", "#f5f5f5", "#e0e0e0", "#d3d3d3", "#c0c0c0"], tags: ["military", "winter", "white"] },
+ { id: 275, name: "Jungle Camo", colors: ["#006400", "#228b22", "#2e8b57", "#3cb371", "#6b8e23"], tags: ["military", "jungle", "green"] },
+ 
+ // PASTELS
+ { id: 276, name: "Cotton Candy", colors: ["#ffb7b2", "#ffdac1", "#ff9aa2", "#e2f0cb", "#b5ead7"], tags: ["pastel", "soft", "sweet"] },
+ { id: 277, name: "Baby Shower", colors: ["#f8bbd9", "#e1bee7", "#c5cae9", "#b3e5fc", "#b2dfdb"], tags: ["pastel", "baby", "soft"] },
+ { id: 278, name: "Easter Eggs", colors: ["#ffb7b2", "#ffdac1", "#e2f0cb", "#b5ead7", "#c7ceea"], tags: ["pastel", "easter", "colorful"] },
+ { id: 279, name: "Ice Cream", colors: ["#ffb7b2", "#ffdac1", "#ff9aa2", "#e2f0cb", "#c7ceea"], tags: ["pastel", "sweet", "creamy"] },
+ { id: 280, name: "Spring Pastel", colors: ["#f8bbd9", "#e1bee7", "#c5cae9", "#b3e5fc", "#b2dfdb"], tags: ["pastel", "spring", "fresh"] },
+ { id: 281, name: "Macaron", colors: ["#f4c2c2", "#fadadd", "#e6e6fa", "#b0e0e6", "#f5f5dc"], tags: ["pastel", "french", "sweet"] },
+ { id: 282, name: "Lavender Field", colors: ["#e6e6fa", "#d8bfd8", "#dda0dd", "#da70d6", "#ee82ee"], tags: ["pastel", "purple", "soft"] },
+ { id: 283, name: "Peach Sorbet", colors: ["#ffdab9", "#ffe4c4", "#ffcba4", "#ffcc99", "#ffb6c1"], tags: ["pastel", "peach", "soft"] },
+ { id: 284, name: "Mint Cream", colors: ["#f5fffa", "#e0f2f1", "#b2dfdb", "#80cbc4", "#4db6ac"], tags: ["pastel", "mint", "fresh"] },
+ { id: 285, name: "Lemon Meringue", colors: ["#fffacd", "#fff8dc", "#fafad2", "#ffffe0", "#fffff0"], tags: ["pastel", "yellow", "soft"] },
+ 
+ // EARTH TONES
+ { id: 286, name: "Terracotta", colors: ["#e2725b", "#d4755f", "#c67b5c", "#b8835e", "#a88b60"], tags: ["earth", "terracotta", "warm"] },
+ { id: 287, name: "Sienna", colors: ["#a0522d", "#8b4513", "#cd853f", "#d2691e", "#daa520"], tags: ["earth", "brown", "rich"] },
+ { id: 288, name: "Ochre", colors: ["#cc7722", "#d4a574", "#c9a86c", "#b8956a", "#a0826d"], tags: ["earth", "yellow", "warm"] },
+ { id: 289, name: "Umber", colors: ["#635147", "#8b7355", "#a0522d", "#8b4513", "#6b4423"], tags: ["earth", "brown", "deep"] },
+ { id: 290, name: "Clay", colors: ["#b66a50", "#c17a5f", "#cc8a6e", "#d69a7d", "#e1aa8c"], tags: ["earth", "clay", "warm"] },
+ { id: 291, name: "Sage", colors: ["#9dc183", "#8fbc8f", "#8f9779", "#77815c", "#8b9a7c"], tags: ["earth", "green", "natural"] },
+ { id: 292, name: "Moss", colors: ["#8a9a5b", "#7d8471", "#8f9779", "#78866b", "#4a5d23"], tags: ["earth", "green", "forest"] },
+ { id: 293, name: "Rust", colors: ["#b7410e", "#c23b22", "#b7410e", "#8b4513", "#a0522d"], tags: ["earth", "orange", "industrial"] },
+ { id: 294, name: "Sandstone", colors: ["#d4c4a8", "#c9b896", "#beac84", "#b3a072", "#a89460"], tags: ["earth", "sand", "warm"] },
+ { id: 295, name: "Pebble", colors: ["#888888", "#999999", "#aaaaaa", "#bbbbbb", "#cccccc"], tags: ["earth", "gray", "neutral"] },
+ 
+ // METALLICS
+ { id: 296, name: "Gold", colors: ["#ffd700", "#ffcc00", "#ffdb58", "#daa520", "#b8860b"], tags: ["metallic", "gold", "luxury"] },
+ { id: 297, name: "Silver", colors: ["#c0c0c0", "#d3d3d3", "#dcdcdc", "#e8e8e8", "#f5f5f5"], tags: ["metallic", "silver", "modern"] },
+ { id: 298, name: "Bronze", colors: ["#cd7f32", "#d4a574", "#c9a86c", "#b8956a", "#a0826d"], tags: ["metallic", "bronze", "warm"] },
+ { id: 299, name: "Copper", colors: ["#b87333", "#cd7f32", "#d2691e", "#b8860b", "#a0522d"], tags: ["metallic", "copper", "industrial"] },
+ { id: 300, name: "Rose Gold", colors: ["#b76e79", "#c88a94", "#d9a6af", "#eac2ca", "#fbdde5"], tags: ["metallic", "pink", "elegant"] }
+ ];
+
+ let favorites = JSON.parse(localStorage.getItem('chromacraft_favorites') || '[]');
+ let customPalettes = JSON.parse(localStorage.getItem('chromacraft_custom') || '[]');
+ let paletteHistory = JSON.parse(localStorage.getItem('chromacraft_history') || '[]');
+ let currentPalette = null;
+ let currentHarmony = 'analogous';
+ let currentColors = ["#6366f1", "#818cf8", "#a5b4fc", "#c7d2fe", "#4338ca"];
+ let customColors = ["#6366f1", "#818cf8", "#a5b4fc"];
+ let extractedColors = [];
+
+ // Initialize
+ document.addEventListener('DOMContentLoaded', () => {
+ renderPalettes(palettes);
+ setupEventListeners();
+ updateFavorites();
+ renderCustomPalette();
+ renderHistory();
+ updateColorblindPreview();
+ });
+
+ // Render Palettes
+ function renderPalettes(paletteList) {
+ const grid = document.getElementById('palette-grid');
+ grid.innerHTML = paletteList.map(palette => `
+ <div class="palette-card" onclick="viewPalette(${palette.id})">
+ <div class="palette-preview">
+ ${palette.colors.map(color => `
+ <div class="palette-color" style="background: ${color}; color: ${getContrastColor(color)};">
+ <span class="hex">${color}</span>
+ </div>
+ `).join('')}
+ </div>
+ <div class="palette-info">
+ <div class="palette-name">
+ ${palette.name}
+ <button class="favorite-btn ${favorites.includes(palette.id) ? 'active' : ''}" 
+ onclick="event.stopPropagation(); toggleFavorite(${palette.id})"
+ title="${favorites.includes(palette.id) ? 'Remove from favorites' : 'Add to favorites'}">
+ ${favorites.includes(palette.id) ? 'Saved' : 'Save'}
+ </button>
+ </div>
+ <div class="palette-tags">
+ ${palette.tags.map(tag => `<span class="palette-tag">${tag}</span>`).join('')}
+ </div>
+ <div class="palette-actions">
+ <button class="btn-small" onclick="event.stopPropagation(); exportPalette(${palette.id})">Export</button>
+ <button class="btn-small" onclick="event.stopPropagation(); downloadPaletteImageById(${palette.id})">Image</button>
+ </div>
+ </div>
+ </div>
+ `).join('');
+ }
+
+ // Tab Switching
+ function setupEventListeners() {
+ document.querySelectorAll('.nav-tab').forEach(tab => {
+ tab.addEventListener('click', () => {
+ document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+ document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+ tab.classList.add('active');
+ document.getElementById(`${tab.dataset.tab}-tab`).classList.add('active');
+ });
+ });
+
+ document.querySelectorAll('.filter-tag').forEach(tag => {
+ tag.addEventListener('click', () => {
+ document.querySelectorAll('.filter-tag').forEach(t => t.classList.remove('active'));
+ tag.classList.add('active');
+ filterPalettes(tag.dataset.filter);
+ });
+ });
+
+ document.getElementById('search-input').addEventListener('input', (e) => {
+ searchPalettes(e.target.value);
+ });
+
+ document.querySelectorAll('.harmony-option').forEach(option => {
+ option.addEventListener('click', () => {
+ document.querySelectorAll('.harmony-option').forEach(o => o.classList.remove('active'));
+ option.classList.add('active');
+ currentHarmony = option.dataset.harmony;
+ });
+ });
+
+ document.getElementById('base-color').addEventListener('input', (e) => {
+ document.getElementById('base-color-text').value = e.target.value;
+ });
+
+ document.getElementById('base-color-text').addEventListener('input', (e) => {
+ if (/^#[0-9A-Fa-f]{6}$/.test(e.target.value)) {
+ document.getElementById('base-color').value = e.target.value;
+ }
+ });
+
+ document.querySelectorAll('.export-tab').forEach(tab => {
+ tab.addEventListener('click', () => {
+ document.querySelectorAll('.export-tab').forEach(t => t.classList.remove('active'));
+ tab.classList.add('active');
+ updateExportCode(tab.dataset.export);
+ });
+ });
+
+ // Drag and drop for image
+ const dropzone = document.getElementById('image-dropzone');
+ dropzone.addEventListener('dragover', (e) => {
+ e.preventDefault();
+ dropzone.classList.add('drag-over');
+ });
+ dropzone.addEventListener('dragleave', () => {
+ dropzone.classList.remove('drag-over');
+ });
+ dropzone.addEventListener('drop', (e) => {
+ e.preventDefault();
+ dropzone.classList.remove('drag-over');
+ if (e.dataTransfer.files.length) {
+ handleImageFile(e.dataTransfer.files[0]);
+ }
+ });
+ }
+
+ // Custom Palette Builder Functions
+ function renderCustomPalette() {
+ const display = document.getElementById('custom-palette-display');
+ display.innerHTML = customColors.map((color, i) => `
+ <div class="custom-color-slot" style="background: ${color};">
+ <button class="remove-btn" onclick="removeCustomColor(${i})">×</button>
+ <input type="color" value="${color}" onchange="updateCustomColor(${i}, this.value)">
+ <span class="hex-label" style="color: ${getContrastColor(color)};">${color}</span>
+ </div>
+ `).join('');
+ }
+
+ function addCustomColor() {
+ if (customColors.length >= 8) {
+ showToast('Maximum 8 colors allowed');
+ return;
+ }
+ const randomColor = '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0');
+ customColors.push(randomColor);
+ renderCustomPalette();
+ }
+
+ function removeCustomColor(index) {
+ if (customColors.length <= 2) {
+ showToast('Minimum 2 colors required');
+ return;
+ }
+ customColors.splice(index, 1);
+ renderCustomPalette();
+ }
+
+ function updateCustomColor(index, value) {
+ customColors[index] = value;
+ renderCustomPalette();
+ }
+
+ function shuffleCustomColors() {
+ customColors.sort(() => Math.random() - 0.5);
+ renderCustomPalette();
+ }
+
+ function clearCustomPalette() {
+ customColors = ['#6366f1', '#818cf8'];
+ renderCustomPalette();
+ }
+
+ function openExportModalCustom() {
+ currentColors = [...customColors];
+ openExportModal();
+ }
+
+ function saveCustomToFavorites() {
+ const newPalette = {
+ id: Date.now(),
+ name: `Custom Palette ${customPalettes.length + 1}`,
+ colors: [...customColors],
+ tags: ["custom"]
+ };
+ customPalettes.push(newPalette);
+ localStorage.setItem('chromacraft_custom', JSON.stringify(customPalettes));
+ addToHistory([...customColors]);
+ showToast('Palette saved! Check Favorites tab.');
+ }
+
+ function addToHistory(colors) {
+ paletteHistory.unshift({ colors, timestamp: Date.now() });
+ if (paletteHistory.length > 10) paletteHistory.pop();
+ localStorage.setItem('chromacraft_history', JSON.stringify(paletteHistory));
+ renderHistory();
+ }
+
+ function renderHistory() {
+ const section = document.getElementById('history-section');
+ const grid = document.getElementById('history-grid');
+ if (paletteHistory.length === 0) {
+ section.style.display = 'none';
+ return;
+ }
+ section.style.display = 'block';
+ grid.innerHTML = paletteHistory.map((item, i) => `
+ <div class="history-item" style="background: linear-gradient(135deg, ${item.colors[0]}, ${item.colors[1] || item.colors[0]});" 
+ onclick="loadHistoryPalette(${i})" title="Click to load">
+ </div>
+ `).join('');
+ }
+
+ function loadHistoryPalette(index) {
+ customColors = [...paletteHistory[index].colors];
+ renderCustomPalette();
+ showToast('Palette loaded from history');
+ }
+
+ // Gradient Generator
+ function updateGradient() {
+ const color1 = document.getElementById('grad-color-1').value;
+ const color2 = document.getElementById('grad-color-2').value;
+ const angle = document.getElementById('grad-angle').value;
+ document.getElementById('grad-angle-value').textContent = angle + '°';
+ document.getElementById('gradient-preview').style.background = `linear-gradient(${angle}deg, ${color1}, ${color2})`;
+ }
+
+ function swapGradientColors() {
+ const c1 = document.getElementById('grad-color-1');
+ const c2 = document.getElementById('grad-color-2');
+ const temp = c1.value;
+ c1.value = c2.value;
+ c2.value = temp;
+ updateGradient();
+ }
+
+ function copyGradientCSS() {
+ const color1 = document.getElementById('grad-color-1').value;
+ const color2 = document.getElementById('grad-color-2').value;
+ const angle = document.getElementById('grad-angle').value;
+ const css = `background: linear-gradient(${angle}deg, ${color1}, ${color2});`;
+ navigator.clipboard.writeText(css).then(() => showToast('Gradient CSS copied!'));
+ }
+
+ // Image Color Extractor
+ function handleImageUpload(event) {
+ if (event.target.files.length) {
+ handleImageFile(event.target.files[0]);
+ }
+ }
+
+ function handleImageFile(file) {
+ const reader = new FileReader();
+ reader.onload = (e) => {
+ const img = document.getElementById('uploaded-image');
+ img.src = e.target.result;
+ img.onload = () => {
+ extractColorsFromImage(img);
+ };
+ document.getElementById('image-dropzone').style.display = 'none';
+ document.getElementById('image-preview-container').style.display = 'block';
+ };
+ reader.readAsDataURL(file);
+ }
+
+ function extractColorsFromImage(img) {
+ const canvas = document.createElement('canvas');
+ const ctx = canvas.getContext('2d');
+ canvas.width = 100;
+ canvas.height = 100;
+ ctx.drawImage(img, 0, 0, 100, 100);
+ 
+ const imageData = ctx.getImageData(0, 0, 100, 100);
+ const pixels = imageData.data;
+ const colorMap = {};
+ 
+ for (let i = 0; i < pixels.length; i += 4) {
+ const r = Math.round(pixels[i] / 10) * 10;
+ const g = Math.round(pixels[i + 1] / 10) * 10;
+ const b = Math.round(pixels[i + 2] / 10) * 10;
+ const hex = rgbToHex(r, g, b);
+ colorMap[hex] = (colorMap[hex] || 0) + 1;
+ }
+ 
+ extractedColors = Object.entries(colorMap)
+ .sort((a, b) => b[1] - a[1])
+ .slice(0, 6)
+ .map(entry => entry[0]);
+ 
+ const container = document.getElementById('extracted-colors');
+ container.innerHTML = extractedColors.map(color => `
+ <div class="extracted-color" style="background: ${color}; color: ${getContrastColor(color)};" 
+ onclick="copyColor('${color}')" title="Click to copy ${color}">
+ ${color}
+ </div>
+ `).join('');
+ }
+
+ function useExtractedColors() {
+ if (extractedColors.length >= 3) {
+ customColors = extractedColors.slice(0, 5);
+ renderCustomPalette();
+ document.querySelector('[data-tab="create"]').click();
+ showToast('Colors loaded into custom palette!');
+ }
+ }
+
+ // Color Blindness Simulator
+ function setColorblindMode(mode) {
+ document.querySelectorAll('.colorblind-option').forEach(o => o.classList.remove('active'));
+ event.target.classList.add('active');
+ updateColorblindPreview(mode);
+ }
+
+ function updateColorblindPreview(mode = 'normal') {
+ const preview = document.getElementById('colorblind-preview');
+ const colors = currentColors;
+ 
+ preview.innerHTML = colors.map(color => {
+ let simulated = color;
+ if (mode !== 'normal') {
+ simulated = simulateColorblind(color, mode);
+ }
+ return `
+ <div style="text-align: center;">
+ <div style="width: 80px; height: 80px; background: ${simulated}; border-radius: 12px; margin-bottom: 8px; box-shadow: var(--shadow);"></div>
+ <span style="font-family: 'Space Mono', monospace; font-size: 11px; color: var(--text-secondary);">${simulated}</span>
+ </div>
+ `;
+ }).join('');
+ }
+
+ function simulateColorblind(hex, type) {
+ // Simplified simulation - in production use a proper library
+ const rgb = hexToRgb(hex);
+ let r = rgb.r, g = rgb.g, b = rgb.b;
+ 
+ switch(type) {
+ case 'protanopia':
+ return rgbToHex(0.567*r + 0.433*g, 0.558*r + 0.442*g, 0.242*g + 0.758*b);
+ case 'deuteranopia':
+ return rgbToHex(0.625*r + 0.375*g, 0.7*r + 0.3*g, 0.3*g + 0.7*b);
+ case 'tritanopia':
+ return rgbToHex(0.95*r + 0.05*g, 0.433*g + 0.567*b, 0.475*g + 0.525*b);
+ case 'achromatopsia':
+ const gray = 0.299*r + 0.587*g + 0.114*b;
+ return rgbToHex(gray, gray, gray);
+ }
+ return hex;
+ }
+
+ // Filter & Search
+ function filterPalettes(filter) {
+ if (filter === 'all') {
+ renderPalettes(palettes);
+ } else {
+ renderPalettes(palettes.filter(p => p.tags.includes(filter)));
+ }
+ }
+
+ function searchPalettes(query) {
+ const lowerQuery = query.toLowerCase();
+ renderPalettes(palettes.filter(p => 
+ p.name.toLowerCase().includes(lowerQuery) ||
+ p.tags.some(t => t.includes(lowerQuery))
+ ));
+ }
+
+ // Favorites
+ function toggleFavorite(id) {
+ const index = favorites.indexOf(id);
+ if (index > -1) {
+ favorites.splice(index, 1);
+ showToast('Removed from favorites');
+ } else {
+ favorites.push(id);
+ showToast('Added to favorites');
+ }
+ localStorage.setItem('chromacraft_favorites', JSON.stringify(favorites));
+ renderPalettes(palettes);
+ updateFavorites();
+ }
+
+ function updateFavorites() {
+ const allPalettes = [...palettes, ...customPalettes];
+ const grid = document.getElementById('favorites-grid');
+ if (favorites.length === 0) {
+ grid.innerHTML = `
+ <div class="empty-state" style="grid-column: 1 / -1;">
+ <div class="empty-state-icon" style="font-size: 48px; color: var(--text-muted);">*</div>
+ <h3>No favorites yet</h3>
+ <p>Start exploring and save palettes you love!</p>
+ </div>
+ `;
+ return;
+ }
+
+ const favPalettes = allPalettes.filter(p => favorites.includes(p.id));
+ grid.innerHTML = favPalettes.map(palette => `
+ <div class="palette-card" onclick="viewPalette(${palette.id})">
+ <div class="palette-preview">
+ ${palette.colors.map(color => `
+ <div class="palette-color" style="background: ${color}; color: ${getContrastColor(color)};">
+ <span class="hex">${color}</span>
+ </div>
+ `).join('')}
+ </div>
+ <div class="palette-info">
+ <div class="palette-name">
+ ${palette.name}
+ <button class="favorite-btn active" onclick="event.stopPropagation(); toggleFavorite(${palette.id})">Saved</button>
+ </div>
+ <div class="palette-tags">
+ ${palette.tags.map(tag => `<span class="palette-tag">${tag}</span>`).join('')}
+ </div>
+ <div class="palette-actions">
+ <button class="btn-small" onclick="event.stopPropagation(); exportPalette(${palette.id})">Export</button>
+ <button class="btn-small" onclick="event.stopPropagation(); downloadPaletteImageById(${palette.id})">Image</button>
+ </div>
+ </div>
+ </div>
+ `).join('');
+ }
+
+ // Generator
+ function generateFromBase() {
+ const baseColor = document.getElementById('base-color').value;
+ currentColors = generateHarmony(baseColor, currentHarmony);
+ displayGeneratedPalette(currentColors);
+ addToHistory([...currentColors]);
+ }
+
+ function generateRandom() {
+ const randomColor = '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0');
+ document.getElementById('base-color').value = randomColor;
+ document.getElementById('base-color-text').value = randomColor;
+ currentColors = generateHarmony(randomColor, currentHarmony);
+ displayGeneratedPalette(currentColors);
+ addToHistory([...currentColors]);
+ document.querySelector('[data-tab="generate"]').click();
+ }
+
+ function generateHarmony(base, type) {
+ const hsl = hexToHsl(base);
+ const colors = [];
+ switch(type) {
+ case 'analogous':
+ colors.push(hslToHex((hsl.h - 30 + 360) % 360, hsl.s, hsl.l));
+ colors.push(hslToHex((hsl.h - 15 + 360) % 360, hsl.s, hsl.l));
+ colors.push(base);
+ colors.push(hslToHex((hsl.h + 15) % 360, hsl.s, hsl.l));
+ colors.push(hslToHex((hsl.h + 30) % 360, hsl.s, hsl.l));
+ break;
+ case 'monochromatic':
+ colors.push(hslToHex(hsl.h, hsl.s, Math.max(10, hsl.l - 30)));
+ colors.push(hslToHex(hsl.h, hsl.s, Math.max(20, hsl.l - 15)));
+ colors.push(base);
+ colors.push(hslToHex(hsl.h, hsl.s, Math.min(90, hsl.l + 15)));
+ colors.push(hslToHex(hsl.h, hsl.s, Math.min(95, hsl.l + 30)));
+ break;
+ case 'complementary':
+ colors.push(base);
+ colors.push(hslToHex((hsl.h + 180) % 360, hsl.s, hsl.l));
+ colors.push(hslToHex(hsl.h, hsl.s, Math.min(90, hsl.l + 20)));
+ colors.push(hslToHex((hsl.h + 180) % 360, hsl.s, Math.min(90, hsl.l + 20)));
+ colors.push(hslToHex(hsl.h, Math.max(0, hsl.s - 20), hsl.l));
+ break;
+ case 'triadic':
+ colors.push(base);
+ colors.push(hslToHex((hsl.h + 120) % 360, hsl.s, hsl.l));
+ colors.push(hslToHex((hsl.h + 240) % 360, hsl.s, hsl.l));
+ colors.push(hslToHex(hsl.h, Math.max(0, hsl.s - 30), Math.min(90, hsl.l + 20)));
+ colors.push(hslToHex((hsl.h + 120) % 360, Math.max(0, hsl.s - 30), Math.min(90, hsl.l + 20)));
+ break;
+ case 'split-complementary':
+ colors.push(base);
+ colors.push(hslToHex((hsl.h + 150) % 360, hsl.s, hsl.l));
+ colors.push(hslToHex((hsl.h + 210) % 360, hsl.s, hsl.l));
+ colors.push(hslToHex(hsl.h, Math.max(0, hsl.s - 20), Math.min(90, hsl.l + 15)));
+ colors.push(hslToHex((hsl.h + 150) % 360, Math.max(0, hsl.s - 20), Math.min(90, hsl.l + 15)));
+ break;
+ case 'tetradic':
+ colors.push(base);
+ colors.push(hslToHex((hsl.h + 90) % 360, hsl.s, hsl.l));
+ colors.push(hslToHex((hsl.h + 180) % 360, hsl.s, hsl.l));
+ colors.push(hslToHex((hsl.h + 270) % 360, hsl.s, hsl.l));
+ colors.push(hslToHex(hsl.h, Math.max(0, hsl.s - 30), hsl.l));
+ break;
+ }
+ return colors;
+ }
+
+ function displayGeneratedPalette(colors) {
+ const preview = document.getElementById('generated-preview');
+ preview.innerHTML = colors.map(color => {
+ const rgb = hexToRgb(color);
+ const contrastColor = getContrastColor(color);
+ return `
+ <div class="generated-color" style="background: ${color}; color: ${contrastColor};" onclick="copyColor('${color}')">
+ <span class="copy-hint">Click to copy</span>
+ <div class="hex">${color}</div>
+ <div class="rgb">rgb(${rgb.r}, ${rgb.g}, ${rgb.b})</div>
+ </div>
+ `;
+ }).join('');
+
+ document.getElementById('color-details').innerHTML = colors.map((color, i) => `
+ <div class="color-detail">
+ <div class="color-detail-label">Color ${i + 1}</div>
+ <div class="color-detail-value" style="color: ${color};">${color}</div>
+ </div>
+ `).join('');
+
+ updateContrastChecker(colors);
+ updateColorblindPreview();
+ }
+
+ // Export & Download
+ function openExportModal() {
+ document.getElementById('export-modal').classList.add('active');
+ updateExportCode('css');
+ drawExportCanvas();
+ }
+
+ function closeExportModal() {
+ document.getElementById('export-modal').classList.remove('active');
+ }
+
+ function exportPalette(id) {
+ const palette = palettes.find(p => p.id === id) || customPalettes.find(p => p.id === id);
+ currentPalette = palette;
+ currentColors = palette.colors;
+ openExportModal();
+ }
+
+ function drawExportCanvas() {
+ const canvas = document.getElementById('export-canvas');
+ const ctx = canvas.getContext('2d');
+ const colors = currentColors;
+ const barWidth = canvas.width / colors.length;
+ 
+ // Draw color bars
+ colors.forEach((color, i) => {
+ ctx.fillStyle = color;
+ ctx.fillRect(i * barWidth, 0, barWidth, canvas.height - 60);
+ 
+ // Draw hex label
+ ctx.fillStyle = getContrastColor(color);
+ ctx.font = 'bold 16px "Space Mono", monospace';
+ ctx.textAlign = 'center';
+ ctx.fillText(color.toUpperCase(), i * barWidth + barWidth / 2, canvas.height - 80);
+ });
+ 
+ // Draw bottom info bar
+ ctx.fillStyle = '#12121a';
+ ctx.fillRect(0, canvas.height - 60, canvas.width, 60);
+ 
+ ctx.fillStyle = '#ffffff';
+ ctx.font = 'bold 20px Inter, sans-serif';
+ ctx.textAlign = 'left';
+ ctx.fillText(currentPalette ? currentPalette.name : 'Generated Palette', 20, canvas.height - 20);
+ 
+ ctx.fillStyle = '#6366f1';
+ ctx.font = '14px Inter, sans-serif';
+ ctx.textAlign = 'right';
+ ctx.fillText('ChromaCraft', canvas.width - 20, canvas.height - 25);
+ }
+
+ function downloadPaletteImage() {
+ const canvas = document.getElementById('export-canvas');
+ const link = document.createElement('a');
+ link.download = `palette-${Date.now()}.png`;
+ link.href = canvas.toDataURL();
+ link.click();
+ showToast('Palette image downloaded!');
+ }
+
+ function downloadPaletteImageById(id) {
+ const palette = palettes.find(p => p.id === id) || customPalettes.find(p => p.id === id);
+ currentColors = palette.colors;
+ currentPalette = palette;
+ drawExportCanvas();
+ setTimeout(downloadPaletteImage, 100);
+ }
+
+ function downloadCustomPaletteImage() {
+ currentColors = [...customColors];
+ currentPalette = { name: 'Custom Palette' };
+ drawExportCanvas();
+ setTimeout(downloadPaletteImage, 100);
+ }
+
+ function updateExportCode(format) {
+ let code = '';
+ switch(format) {
+ case 'css':
+ code = `/* CSS Variables */\n:root {\n${currentColors.map((c, i) => ` --color-${['primary', 'secondary', 'accent-1', 'accent-2', 'dark'][i] || i}: ${c};`).join('\n')}\n}`;
+ break;
+ case 'scss':
+ code = `// SCSS Variables\n${currentColors.map((c, i) => `$color-${['primary', 'secondary', 'accent-1', 'accent-2', 'dark'][i] || i}: ${c};`).join('\n')}`;
+ break;
+ case 'json':
+ code = JSON.stringify({
+ name: currentPalette?.name || 'Generated Palette',
+ colors: currentColors.map((c, i) => ({
+ name: ['primary', 'secondary', 'accent-1', 'accent-2', 'dark'][i] || `color-${i}`,
+ hex: c,
+ rgb: hexToRgb(c)
+ }))
+ }, null, 2);
+ break;
+ case 'tailwind':
+ code = `// tailwind.config.js\ncolors: {\n${currentColors.map((c, i) => ` '${['primary', 'secondary', 'accent-1', 'accent-2', 'dark'][i] || i}': '${c}',`).join('\n')}\n}`;
+ break;
+ }
+ document.getElementById('export-code').textContent = code;
+ }
+
+ // Copy Functions
+ function copyColor(color) {
+ navigator.clipboard.writeText(color).then(() => {
+ showToast(`Copied ${color} to clipboard!`);
+ });
+ }
+
+ function copyAllColors() {
+ navigator.clipboard.writeText(currentColors.join('\n')).then(() => {
+ showToast('All colors copied to clipboard!');
+ });
+ }
+
+ function copyExportCode() {
+ navigator.clipboard.writeText(document.getElementById('export-code').textContent).then(() => {
+ showToast('Code copied to clipboard!');
+ });
+ }
+
+ // Toast
+ function showToast(message) {
+ const toast = document.getElementById('toast');
+ document.getElementById('toast-message').textContent = message;
+ toast.classList.add('show');
+ setTimeout(() => toast.classList.remove('show'), 2500);
+ }
+
+ // View Palette
+ function viewPalette(id) {
+ const palette = palettes.find(p => p.id === id) || customPalettes.find(p => p.id === id);
+ currentPalette = palette;
+ currentColors = palette.colors;
+ openExportModal();
+ }
+
+ // Utility Functions
+ function hexToRgb(hex) {
+ const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+ return result ? {
+ r: parseInt(result[1], 16),
+ g: parseInt(result[2], 16),
+ b: parseInt(result[3], 16)
+ } : null;
+ }
+
+ function rgbToHex(r, g, b) {
+ return "#" + ((1 << 24) + (Math.round(r) << 16) + (Math.round(g) << 8) + Math.round(b)).toString(16).slice(1);
+ }
+
+ function hexToHsl(hex) {
+ let { r, g, b } = hexToRgb(hex);
+ r /= 255; g /= 255; b /= 255;
+ const max = Math.max(r, g, b), min = Math.min(r, g, b);
+ let h, s, l = (max + min) / 2;
+ if (max === min) {
+ h = s = 0;
+ } else {
+ const d = max - min;
+ s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+ switch (max) {
+ case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+ case g: h = (b - r) / d + 2; break;
+ case b: h = (r - g) / d + 4; break;
+ }
+ h /= 6;
+ }
+ return { h: h * 360, s: s * 100, l: l * 100 };
+ }
+
+ function hslToHex(h, s, l) {
+ l /= 100;
+ const a = s * Math.min(l, 1 - l) / 100;
+ const f = n => {
+ const k = (n + h / 30) % 12;
+ const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+ return Math.round(255 * color).toString(16).padStart(2, '0');
+ };
+ return `#${f(0)}${f(8)}${f(4)}`;
+ }
+
+ function getContrastColor(hex) {
+ const rgb = hexToRgb(hex);
+ const brightness = (rgb.r * 299 + rgb.g * 587 + rgb.b * 114) / 1000;
+ return brightness > 128 ? '#0f172a' : '#ffffff';
+ }
+
+ function getContrastRatio(hex1, hex2) {
+ const lum1 = getLuminance(hex1);
+ const lum2 = getLuminance(hex2);
+ return (Math.max(lum1, lum2) + 0.05) / (Math.min(lum1, lum2) + 0.05);
+ }
+
+ function getLuminance(hex) {
+ const rgb = hexToRgb(hex);
+ const a = [rgb.r, rgb.g, rgb.b].map(v => {
+ v /= 255;
+ return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+ });
+ return a[0] * 0.2126 + a[1] * 0.7152 + a[2] * 0.0722;
+ }
+
+ function updateContrastChecker(colors) {
+ const primary = colors[0];
+ const contrast = getContrastRatio(primary, '#ffffff');
+ document.getElementById('contrast-demo').innerHTML = `
+ <div class="contrast-sample" style="background: ${primary}; color: ${getContrastColor(primary)};">
+ <h4>Large Text</h4>
+ <p>Small text sample</p>
+ </div>
+ <div class="contrast-sample" style="background: ${colors[colors.length-1]}; color: ${getContrastColor(colors[colors.length-1])};">
+ <h4>Large Text</h4>
+ <p>Small text sample</p>
+ </div>
+ `;
+ const isAAPass = contrast >= 4.5;
+ const isAAAPass = contrast >= 7;
+ document.getElementById('contrast-score').innerHTML = `
+ <div class="score-circle ${isAAPass ? 'score-pass' : 'score-fail'}">
+ <div class="ratio">${contrast.toFixed(1)}</div>
+ <div class="grade">AA ${isAAPass ? 'Pass' : 'Fail'}</div>
+ </div>
+ <div class="score-circle ${isAAAPass ? 'score-pass' : 'score-fail'}">
+ <div class="ratio">${contrast.toFixed(1)}</div>
+ <div class="grade">AAA ${isAAAPass ? 'Pass' : 'Fail'}</div>
+ </div>
+ `;
+ }
+ </script>
+</body>
+</html>
